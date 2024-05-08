@@ -97,7 +97,7 @@ def combine_multiplexed_metadata(
         modality = Sample.Modalities.MULTIPLEXED ## Needs to be removed
 ```
 
-
+#### Q2: metadata json files
 
 
 ## `Multiplexed` in the `Sample` model
