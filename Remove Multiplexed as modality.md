@@ -70,11 +70,11 @@ And at line [59](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4f
 
 Where dose the value of `multiplexed_with` come from?
 
+## Identify `Sample.Modalities.MULTIPLEXED`
 
+### The`Project` model
 
-## `Multiplexed` in the `Project` model
-
-#### Q1: The `combine_multiplexed_metadata` method in line [211](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/project.py#L211)
+At line [211](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/project.py#L211), the modality constant should be removed:
 
 ```py
 def combine_multiplexed_metadata(
@@ -84,25 +84,18 @@ def combine_multiplexed_metadata(
         combined_single_cell_metadata: List[Dict],
         sample_id: str,
     ):
-        """Combines the two metadata dicts together to have all multiplexed data
-        at the library level. Writes the combination out to the project and
-        sample metadata files. The sample file also includes multiplexed samples.
-        """
-
-        combined_metadata = []
-        multiplexed_sample_mapping = {}
-        if not multiplexed_libraries_metadata:
-            return combined_metadata, multiplexed_sample_mapping
+ 
+       ...
 
         modality = Sample.Modalities.MULTIPLEXED ## Needs to be removed
 ```
+#### Q1: The `combine_multiplexed_metadata` method in line [211](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/project.py#L211)
 
 #### Q2: metadata json files
 
+### The `Sample` model
 
-## `Multiplexed` in the `Sample` model
-
-At line [18](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/sample.py#L18) and [25](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/sample.py#L25), `Multiplexed` needs to be removed from the modality;
+At line [18](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/sample.py#L18) and [25](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/sample.py#L25), `Multiplexed` needs to be removed from the modality:
 
 ```py
 class Modalities:
@@ -135,7 +128,7 @@ def output_multiplexed_metadata_file_path(self):
  return Sample.get_output_metadata_file_path(self.scpca_id, Sample.Modalities.MULTIPLEXED) # Clean up
 ```
 
-At line [113](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/sample.py#L113), the "has_multiplexed_data" value should be removed
+At line [113](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/sample.py#L113), the "has_multiplexed_data" value should be removed:
 ```py
   def modalities(self):
         attr_name_modality_mapping = {
