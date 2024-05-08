@@ -70,7 +70,7 @@ And at line [59](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4f
 
 Where dose the value of `multiplexed_with` come from?
 
-## Identify `Sample.Modalities.MULTIPLEXED`
+## Identify `Sample.Modalities.MULTIPLEXED` in the codebase
 
 ### The`Project` model
 
