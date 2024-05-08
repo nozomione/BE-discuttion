@@ -36,7 +36,7 @@ def load_data(
     self.process_project_data(project_data, sample_id, **kwargs)
 ```
 
-The load-data` command is defined in `scpca-portal/bin/sportal` at line [34]([https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/bin/sportal#L4](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/bin/sportal#L34)):
+The `load-data` command is defined in `scpca-portal/bin/sportal` at line [34](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/bin/sportal#L34):
 
 ```py
  "load-data": run_api.format("./manage.py load_data {}"),
