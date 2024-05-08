@@ -74,7 +74,7 @@ Where dose the value of `multiplexed_with` come from?
 
 ### The`Project` model
 
-At line [211](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/project.py#L211), the modality constant should be removed:
+At line [288](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/project.py#L228), the modality constant should be removed:
 
 ```py
 def combine_multiplexed_metadata(
@@ -89,7 +89,8 @@ def combine_multiplexed_metadata(
 
         modality = Sample.Modalities.MULTIPLEXED ## Needs to be removed
 ```
-#### Q1: The `combine_multiplexed_metadata` method in line [211](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/project.py#L211)
+#### Q1: The [`combine_multiplexed_metadata`](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/project.py#L211) method 
+
 
 #### Q2: metadata json files
 
