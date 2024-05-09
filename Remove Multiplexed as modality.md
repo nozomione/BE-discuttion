@@ -129,7 +129,7 @@ def output_multiplexed_metadata_file_path(self):
  return Sample.get_output_metadata_file_path(self.scpca_id, Sample.Modalities.MULTIPLEXED) # Clean up
 ```
 
-At line [113](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/sample.py#L113), the "has_multiplexed_data" value should be removed:
+At line [113](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/sample.py#L113), the `has_multiplexed_data` property should be removed from the `modalities`:
 ```py
   def modalities(self):
         attr_name_modality_mapping = {
