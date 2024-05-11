@@ -6,7 +6,7 @@
 
 During our weekly "Nozomi + David BE: Discussion" meeting, we use this document to keep track of the questions (asked by Nozomi) and answers (provided by David). This information is then utilized to plan the implementation strategies and file issues for the epic.
 
-This also includes a homework (to-do list) section that we intend to complete before our next meeting.
+This also includes a homework (to-do list) section that we aim to complete before our next meeting.
 
 (The blob is included for future reference.)
 ## 05/08/2024
