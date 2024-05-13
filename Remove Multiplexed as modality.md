@@ -64,6 +64,6 @@ has_multiplexed_data = bool(data.get("multiplexed_with"))
 - [x] Create a space under each question for an answer
 - [ ] From david: Prepare intro to loading of multiplexed samples
 - [x] Look at where / how we use `Sample.Model.MULTIPLEXED` this might be covered in your original notes
-  - This section will be added to the next meeting note.
+  - This section will be added to the next meeting note
 
 ## 05/15/2024
