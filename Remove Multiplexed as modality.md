@@ -63,6 +63,7 @@ has_multiplexed_data = bool(data.get("multiplexed_with"))
 - [x] Take what is in github markdown file and place in this document (HackMD)
 - [x] Create a space under each question for an answer
 - [ ] From david: Prepare intro to loading of multiplexed samples
-- [ ] Look at where / how we use `Sample.Model.MULTIPLEXED` this might be covered in your original notes
+- [x] Look at where / how we use `Sample.Model.MULTIPLEXED` this might be covered in your original notes
+  - This section will be added to the next meeting note.
 
 ## 05/15/2024
