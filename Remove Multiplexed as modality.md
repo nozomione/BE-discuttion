@@ -1,4 +1,4 @@
-# Removing Sample.Modalities.MULTIPLEXED
+# Removing Sample.Modalities.MULTIPLEXED Q & A
 
 **Epic:** [Remove Sample.Modalities.MULTIPLEXED](https://github.com/AlexsLemonade/scpca-portal/issues/695) 
 
