@@ -60,8 +60,8 @@ has_multiplexed_data = bool(data.get("multiplexed_with"))
 - [x] Look up: [List Comprehension w/ if](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions)
   - Additionally, read [Nested List Comprehensions](https://docs.python.org/3/tutorial/datastructures.html#nested-list-comprehensions)
 - [ ] Look up: Class methods
-- [ ] Take what is in github markdown file and place in this document
-- [ ] Create a space under each question for an answer
+- [x] Take what is in github markdown file and place in this document (HackMD)
+- [x] Create a space under each question for an answer
 - [ ] From david: Prepare intro to loading of multiplexed samples
 - [ ] Look at where / how we use `Sample.Model.MULTIPLEXED` this might be covered in your original notes
 
