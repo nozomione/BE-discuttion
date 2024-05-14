@@ -73,6 +73,10 @@ has_multiplexed_data = bool(data.get("multiplexed_with"))
 
 **Q:** Where/how `Sample.Modalities.MULTIPLEXED` is used?
 
+(Answers were added by Nozomi)
+
+**A:** 
+
 At the`Project` model:
 
 1. In the `combine_multiplexed_metadata` method, it is assigned as the value of the `modality` attribute ([L288](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/project.py#L228)):
