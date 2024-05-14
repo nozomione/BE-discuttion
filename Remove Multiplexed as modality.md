@@ -67,3 +67,71 @@ has_multiplexed_data = bool(data.get("multiplexed_with"))
   - This section will be added to the next meeting note
 
 ## 05/15/2024
+
+
+### Previous Homework
+
+**Q:** Where/how `Sample.Modalities.MULTIPLEXED` is used?
+
+At the`Project` model:
+
+1. In the `combine_multiplexed_metadata` method, it is assigned as the value of the `modality` attribute ([L288](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/project.py#L228)):
+
+```py
+def combine_multiplexed_metadata(...):
+     ...
+     modality = Sample.Modalities.MULTIPLEXED ## "MULTIPLEXED"
+```
+
+2. In the `get_metadata_field_names(self, columns, modality)`, it is used as a key in the `ordering` dictionary whose value is a tuple of the metadata filed names for multiplexed libraries ([L773](https://github.com/AlexsLemonade/scpca-portal/blob/026a204a0aa89e6e2572038a46cbe154af7efbef/api/scpca_portal/models/project.py#L773))
+
+```py
+ def get_metadata_field_names(self, columns, modality):
+        ordering = {
+            Sample.Modalities.MULTIPLEXED: (...),
+```
+
+
+At the `Sample` model:
+
+1. In the `Modalities` class, the value `MULTIPLEXED` is added as one of the modalities and to a dictionary named `NAME_MAPPING ` ([L15](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/sample.py#L15)):
+
+```py
+class Modalities:
+      ...
+      MULTIPLEXED = "MULTIPLEXED" 
+      ...
+      NAME_MAPPING = {
+         ...
+         MULTIPLEXED: "Multiplexed", 
+         ...
+     }
+```
+
+2. In the static method `get_output_metadata_file_path(scpca_sample_id, modality)`, it's used as a key (`MULTIPLEXED`) in the returned dictionary ([100](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/sample.py#L100)):
+```py
+ def get_output_metadata_file_path(scpca_sample_id, modality):
+        return {
+            Sample.Modalities.MULTIPLEXED: common.OUTPUT_DATA_PATH
+            / f"{scpca_sample_id}_multiplexed_metadata.tsv",
+```
+
+And the static method above is called in the `output_multiplexed_metadata_file_path(self)` to get the path of the multiplexed metadata file [142](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/sample.py#L142):
+
+```py
+def output_multiplexed_metadata_file_path(self):
+ return Sample.get_output_metadata_file_path(self.scpca_id, Sample.Modalities.MULTIPLEXED) # Clean up
+```
+
+At line [113](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/sample.py#L113), the `has_multiplexed_data` property should be removed from the `modalities`:
+```py
+  def modalities(self):
+        attr_name_modality_mapping = {
+            "has_bulk_rna_seq": Sample.Modalities.BULK_RNA_SEQ,
+            "has_cite_seq_data": Sample.Modalities.CITE_SEQ,
+            "has_multiplexed_data": Sample.Modalities.MULTIPLEXED, # Clean up
+            "has_spatial_data": Sample.Modalities.SPATIAL,
+```
+
+
+
