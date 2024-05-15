@@ -70,7 +70,7 @@ has_multiplexed_data = bool(data.get("multiplexed_with"))
 
 In the`Project` model:
 
-**#1:** In `combine_multiplexed_metadata`, it's assigned to the attribute `modality`  ([L288](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/project.py#L228)):
+**#1:** In `combine_multiplexed_metadata`, it's assigned to the attribute `modality` which is passed as an argument to methods to get the metadata information ([L288](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/project.py#L228)):
 
 ```python
 def combine_multiplexed_metadata(...):
