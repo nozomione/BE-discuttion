@@ -143,6 +143,6 @@ def output_multiplexed_metadata_file_path(self):
 **A:**
 
 
-Q: Where does the `modalities` attribute in the `Sample` ([L109](https://github.com/AlexsLemonade/scpca-portal/blob/026a204a0aa89e6e2572038a46cbe154af7efbef/api/scpca_portal/models/sample.py#L109)) utilized in the codebase? The `Project` defineds the `modalities` field ([L51](https://github.com/AlexsLemonade/scpca-portal/blob/026a204a0aa89e6e2572038a46cbe154af7efbef/api/scpca_portal/models/project.py#L51)). Does this field relate to the `modalities` attribute in the `Sample`?
+Q: Where does the `modalities` attribute ([L109](https://github.com/AlexsLemonade/scpca-portal/blob/026a204a0aa89e6e2572038a46cbe154af7efbef/api/scpca_portal/models/sample.py#L109)) in the `Sample` model utilized in the codebase? The `Project` model defineds the `modalities` field ([L51](https://github.com/AlexsLemonade/scpca-portal/blob/026a204a0aa89e6e2572038a46cbe154af7efbef/api/scpca_portal/models/project.py#L51)). Does this field relate to the `modalities` attribute in the `Sample` model?
 
 **A:**
