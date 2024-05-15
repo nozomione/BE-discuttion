@@ -139,7 +139,7 @@ def output_multiplexed_metadata_file_path(self):
 
 ## 05/15/2024
 
-**Q:** What is the method for viewing the tables (e.g., [`samples`](https://github.com/AlexsLemonade/scpca-portal/blob/026a204a0aa89e6e2572038a46cbe154af7efbef/api/scpca_portal/models/sample.py#L11)) in the databse? Do we use any GUI tools (e.g., pgAdmin)?
+**Q:** What is the method for viewing the tables (e.g., [`samples`](https://github.com/AlexsLemonade/scpca-portal/blob/026a204a0aa89e6e2572038a46cbe154af7efbef/api/scpca_portal/models/sample.py#L11)) in the databse? Do we use any GUI tools (e.g., [pgAdmin](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ConnectToPostgreSQLInstance.html#USER_ConnectToPostgreSQLInstance.pgAdmin))?
 
 **A:**
 
