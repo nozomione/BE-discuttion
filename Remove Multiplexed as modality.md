@@ -116,7 +116,7 @@ def output_multiplexed_metadata_file_path(self):
  # e.g., "/home/user/code/SCPCS000133_multiplexed_metadata.tsv" in local
 ```
 
-**#3:** In the property `modalities`, it's assined as the value of the key `has_multiplexed_data` in `attr_name_modality_mapping` ([L113](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/sample.py#L113)):
+**#3:** In the property `modalities`, it's assigned as the value of the key `has_multiplexed_data` in `attr_name_modality_mapping` ([L113](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/sample.py#L113)):
 ```python
   def modalities(self):
         attr_name_modality_mapping = {
