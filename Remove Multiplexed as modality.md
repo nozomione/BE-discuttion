@@ -77,7 +77,7 @@ def combine_multiplexed_metadata(...):
      modality = Sample.Modalities.MULTIPLEXED ## "MULTIPLEXED"
 ```
 
-**#2:** In `get_metadata_field_names`, it's used as a key in `ordering` dictionary which is used for sorting coulmns in the output files ([L773](https://github.com/AlexsLemonade/scpca-portal/blob/026a204a0aa89e6e2572038a46cbe154af7efbef/api/scpca_portal/models/project.py#L773))
+**#2:** In `get_metadata_field_names`, it's used as a key in `ordering` dictionary which is used for sorting coulmns in the output files ([L773](https://github.com/AlexsLemonade/scpca-portal/blob/026a204a0aa89e6e2572038a46cbe154af7efbef/api/scpca_portal/models/project.py#L773)):
 
 ```python
  def get_metadata_field_names(self, columns, modality):
