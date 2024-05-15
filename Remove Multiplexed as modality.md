@@ -132,7 +132,8 @@ def output_multiplexed_metadata_file_path(self):
             if getattr(self, attr_name) 
            ]
 
-       # e.g., Returns a sorted list of available modalities, ['Bulk RNA-seq', 'Multiplexed' ]
+       # e.g., Returns a sorted list of available modalities
+       # ['Bulk RNA-seq', 'Multiplexed' ]
 ```
   
 
