@@ -1,4 +1,4 @@
-# Q&A: Removing Sample.Modalities.MULTIPLEXED
+# Q&A
 
 **Epic:** [Remove Sample.Modalities.MULTIPLEXED](https://github.com/AlexsLemonade/scpca-portal/issues/695) 
 
@@ -60,7 +60,7 @@ has_multiplexed_data = bool(data.get("multiplexed_with"))
 - [x] Look up: [List Comprehension w/ if](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions)
   - Additionally, read [Nested List Comprehensions](https://docs.python.org/3/tutorial/datastructures.html#nested-list-comprehensions)
 - [ ] Look up: Class methods
-- [x] Take what is in github markdown file and place in this document (HackMD)
+- [x] Take what is in github markdown file and place in this document
 - [x] Create a space under each question for an answer
 - [x] Look at where / how we use `Sample.Model.MULTIPLEXED` this might be covered in your original notes (see **Nozomi's Note** section below)
 - From david: Prepare intro to loading of multiplexed samples
@@ -78,7 +78,7 @@ def combine_multiplexed_metadata(...):
      modality = Sample.Modalities.MULTIPLEXED ## "MULTIPLEXED"
 ```
 
-**#2:** In `get_metadata_field_names`, it's used as a key in `ordering` dictionary which is used for sorting coulmns in the output files ([L773](https://github.com/AlexsLemonade/scpca-portal/blob/026a204a0aa89e6e2572038a46cbe154af7efbef/api/scpca_portal/models/project.py#L773)):
+**#2:** In `get_metadata_field_names`, it's used as a key in the `ordering` dictionary which is used for sorting coulmns in the output files ([L773](https://github.com/AlexsLemonade/scpca-portal/blob/026a204a0aa89e6e2572038a46cbe154af7efbef/api/scpca_portal/models/project.py#L773)):
 
 ```python
  def get_metadata_field_names(self, columns, modality):
@@ -132,11 +132,10 @@ def output_multiplexed_metadata_file_path(self):
             # e.g., if self.has_multiplexed_data is true
             if getattr(self, attr_name) 
            ]
-
-       # e.g., Returns a sorted list of available modalities
-       # ['Bulk RNA-seq', 'Multiplexed' ]
+    # e.g., Returns a sorted list of available modalities 
+    # ['Bulk RNA-seq', 'Multiplexed' ]
 ```
-  
+
 
 ## 05/15/2024
 **Q:** What is the method for viewing the tables (e.g., [`samples`](https://github.com/AlexsLemonade/scpca-portal/blob/026a204a0aa89e6e2572038a46cbe154af7efbef/api/scpca_portal/models/sample.py#L11)) in the databse? Do we use any GUI tools during development (e.g., [pgAdmin](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ConnectToPostgreSQLInstance.html#USER_ConnectToPostgreSQLInstance.pgAdmin))?
@@ -208,15 +207,34 @@ The project is updated at load_data time. And then stored to the database. So it
 - [ ] Look up: ORM/Query API (e.g., for `sportal shell`)
 - [ ] Go over ScPCA test commands/files 
 - [ ] Review the usage of `Sample.modalities` (for Q2)
-- [ ] Outline the steps to simplify the column sorting for the metadata TSVs (related issue [#699](https://github.com/AlexsLemonade/scpca-portal/issues/699)) before drafting an issue for it (see **Nozomi's Note** section below)
+- [ ] Baesd on our chat, outline the steps to simplify the column sorting for the metadata TSVs (related issue [#699](https://github.com/AlexsLemonade/scpca-portal/issues/699)) before drafting an issue for it (see **Nozomi's Note** section below)
 
 #### Nozomi's Note:
-Steps for simplifying the colum sorting for the metadata TSVs:
+Currently, we sort the columns of metadata TSV files during the write operations using the `get_metadata_field_names` method ([L770](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/project.py#L770)) in the `Project` model:
 
-**Step 1:**
+```python
+  def get_metadata_field_names(self, columns, modality):
+      ordering = {
+            Sample.Modalities.MULTIPLEXED: (
+                "scpca_sample_id",
+                "scpca_library_id",
+                ...
+```
 
-**Step 2:**
+Based on the modality, this method returns the appropriate metadata field names for each TVS file. However, this logic will need to be updated as we're removing `MULTIPLEXED` from the modalities.
 
-**Step 3:**
+Furthermore, we're aiming to further simplify this logic by setting a global sort order for all output metadata files and making it modality-independent.
+
+These are the steps for simplifying the colum sorting for the metadata TSVs: 
+
+**Step 1:** Add the global sort order list to the project setting (`/config/common.py`)
+
+**Step 2:** Create a new utility function that:
+- sorts the set of keys returned by utils.get_keys_from_dicts based on the global sort order
+- returns that sorted keys as a list
+
+**Step 3:** Replace `get_metadata_field_names` with this newly created utility function
+
+More details: [2024-05-21 - 2024-06-03](https://data-lab-knowledge.slab.com/posts/2024-05-21-2024-06-03-iy7h83m0)
 
 ## 05/22/2024
