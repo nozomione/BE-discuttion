@@ -140,8 +140,36 @@ def output_multiplexed_metadata_file_path(self):
 ## 05/15/2024
 **Q:** What is the method for viewing the tables (e.g., [`samples`](https://github.com/AlexsLemonade/scpca-portal/blob/026a204a0aa89e6e2572038a46cbe154af7efbef/api/scpca_portal/models/sample.py#L11)) in the databse? Do we use any GUI tools during development (e.g., [pgAdmin](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ConnectToPostgreSQLInstance.html#USER_ConnectToPostgreSQLInstance.pgAdmin))?
 
-**A:**
+**A:** 
 
+Short Answer: No we don't really use GUI tools. There are various ways to connect to the database but for the security purposes, we don't typically do this. It is possible to SSHing to the server but we don't encourage it in our workflow. 
+
+Then how do we get a better understanding of the database?
+
+The ways to accomplish:
+We have two `sportal` commands that allow you to look at what is in the database:
+1. `sportal shell` which will load up a python shell in the context of your application. Where you can import a model and then use the ORM to query rows from that model table. You will get back a `queryset` but this can be converted to model instances.
+
+e.g. )
+```python
+sportal shell
+# python interactive shell 
+>>> from scpca_portal.models.project import Project
+>>> p = Project.objects.all() # e.g., <QuerySet [<Project: Project SCPCP000001>, <Project: Project SCPCP000002>, <Project: Project SCPCP000003>]>
+>>> p.filter(scpca_id='SCPCP000001') # <QuerySet [<Project: Project SCPCP000001>]>
+>>> p.first() # <Project: Project SCPCP000001>
+```
+
+2. `sportal postgres-cli` which will give you access to the postgres shell where you can run sql query direction against your database.
+
+e.g. )
+```bash 
+sportal postgres-cli
+# postgres interactive terminal 
+postgres=# \l
+postgres=# select * from sample
+postgres=# \q
+```
 
 **Q:** Where is the `modalities` attribute ([L109](https://github.com/AlexsLemonade/scpca-portal/blob/026a204a0aa89e6e2572038a46cbe154af7efbef/api/scpca_portal/models/sample.py#L109)) in the `Sample` model utilized in the codebase? 
 
@@ -156,5 +184,38 @@ The `Project` model defineds the `modalities` field ([L51](https://github.com/Al
  modalities = ArrayField(models.TextField(), default=list)
 ```
 
-
 **A:**
+
+It is used when updating counts on projects, these are aggregate values that describe the project. So every sample has modalities that are evaluated via the `modalities` property. Then when we update a project, we call `project.update_counts` and in that method we use this `sample.modalities` property to collect all of the project's samples and save them to the database for that project.
+
+`Sample.modalities` are evaluated based on properties at runtime against a sample instance.
+
+e.g. )
+
+Sample 1:
+ has_cite_seq = True
+ modalites is evaluated to "Cite-seq"
+ 
+Sample 2:
+ has_bulk_rna = True
+ modalites is evaluated to "Bulk rna"
+
+The project is updated at load_data time. And then stored to the database. So it basically just checks all of the project's samples modalities and adds them to a set (to remove duplicates) and then saves that to the `Project` model.
+
+### Homework
+- [ ] Look up: Python Lambda function
+- [ ] Look up: ORM/Query API (e.g., for `sportal shell`)
+- [ ] Go over ScPCA test commands/files 
+- [ ] Review the usage of `Sample.modalities` (for Q2)
+- [ ] Outline the steps to simplify the column sorting for the metadata TSVs (related issue [#699](https://github.com/AlexsLemonade/scpca-portal/issues/699)) before drafting an issue for it (see **Nozomi's Note** section below)
+
+#### Nozomi's Note:
+Steps for simplifying the colum sorting for the metadata TSVs:
+
+**Step 1:**
+
+**Step 2:**
+
+**Step 3:**
+
+## 05/22/2024
