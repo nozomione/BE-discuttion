@@ -208,6 +208,7 @@ The project is updated at load_data time. And then stored to the database. So it
 - [ ] Go over ScPCA test commands/files 
 - [ ] Review the usage of `Sample.modalities` (for Q2)
 - [x] Based on our chat, outline the steps to simplify the column sorting for the metadata TSVs (related issue [#699](https://github.com/AlexsLemonade/scpca-portal/issues/699)) before drafting an issue for it (see **Nozomi's Note** section below)
+  - Filed issue: [Add util function for sorting columns of metadata TSVs](https://github.com/AlexsLemonade/scpca-portal/issues/703)
 
 #### Nozomi's Note:
 Currently, we sort the columns of metadata TSV files during the write operations using the `get_metadata_field_names` method ([L770](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/project.py#L770)) in the `Project` model:
@@ -230,22 +231,18 @@ These are the steps for simplifying the colum sorting for the metadata TSVs:
 **Step 1:** Add the global sort order list to the project setting (`/config/common.py`)
 
 **Step 2:** Create a new utility function that:
-- sorts the set of keys returned by `utils.get_keys_from_dicts` based on the global sort order
+- sorts the set of keys returned by utils.get_keys_from_dicts based on the global sort order
 - returns that sorted keys as a list
 
-**Step 3:** Replace `Project::get_metadata_field_names` with this newly created utility function
+**Step 3:** Replace `get_metadata_field_names` with this newly created utility function
 
 More details: [2024-05-21 - 2024-06-03](https://data-lab-knowledge.slab.com/posts/2024-05-21-2024-06-03-iy7h83m0)
-
-#### Update:
-Filed issue: [Add util function for sorting columns of metadata TSVs](https://github.com/AlexsLemonade/scpca-portal/issues/703) 
 
 ## 05/22/2024
 #### General:
 
-**Q:** Is the property `multiplexed_computed_file` in the `Project` ([L97](https://github.com/AlexsLemonade/scpca-portal/blob/f6ec0f77e2e020fe4bb5221daf6a6439bfa782a9/api/scpca_portal/models/project.py#L97)) and the `Sample` ([L193](https://github.com/AlexsLemonade/scpca-portal/blob/f6ec0f77e2e020fe4bb5221daf6a6439bfa782a9/api/scpca_portal/models/sample.py#L193)) models used solely for testing for `load_data` (e.g., [L365](https://github.com/AlexsLemonade/scpca-portal/blob/f6ec0f77e2e020fe4bb5221daf6a6439bfa782a9/api/scpca_portal/test/management/commands/test_load_data.py#L365))? 
+**Q:** Is the property `multiplexed_computed_file` in the `Project` ([L97](https://github.com/AlexsLemonade/scpca-portal/blob/f6ec0f77e2e020fe4bb5221daf6a6439bfa782a9/api/scpca_portal/models/project.py#L97)) and `Sample` ([L193](https://github.com/AlexsLemonade/scpca-portal/blob/f6ec0f77e2e020fe4bb5221daf6a6439bfa782a9/api/scpca_portal/models/sample.py#L193)) models used solely for testing for `load_data` (e.g., [L365](https://github.com/AlexsLemonade/scpca-portal/blob/f6ec0f77e2e020fe4bb5221daf6a6439bfa782a9/api/scpca_portal/test/management/commands/test_load_data.py#L365))? 
 
-Is this a common pattern in Django to add properties for testing in the model? Or considering the frequent changes in the codebase, will it eventully be refacted?
 
 ```py
 @property
@@ -259,16 +256,22 @@ Is this a common pattern in Django to add properties for testing in the model? O
         except ComputedFile.DoesNotExist:
             pass
 ```
+Is this a common pattern in Django to add properties for testing in the model? If so, should we add comments to describe test properties? 
 
-The same question applies to the following properties in the models:
+Or considering the frequent changes in the codebase, will it eventully be refacted?
+
+**NOTE:** The same question applies to the following properties in the models:
 - `single_cell_computed_file` in `Project` ([L144](https://github.com/AlexsLemonade/scpca-portal/blob/f6ec0f77e2e020fe4bb5221daf6a6439bfa782a9/api/scpca_portal/models/project.py#L144)) and `Sample` ([L204](https://github.com/AlexsLemonade/scpca-portal/blob/f6ec0f77e2e020fe4bb5221daf6a6439bfa782a9/api/scpca_portal/models/sample.py#L204)).
 - `single_cell_anndata_computed_file` in  ([L166](https://github.com/AlexsLemonade/scpca-portal/blob/f6ec0f77e2e020fe4bb5221daf6a6439bfa782a9/api/scpca_portal/models/project.py#L166)) and `Sample` ([L215](https://github.com/AlexsLemonade/scpca-portal/blob/f6ec0f77e2e020fe4bb5221daf6a6439bfa782a9/api/scpca_portal/models/sample.py#L215)).
 - `single_cell_merged_computed_file` in `Project` ([L155](https://github.com/AlexsLemonade/scpca-portal/blob/f6ec0f77e2e020fe4bb5221daf6a6439bfa782a9/api/scpca_portal/models/project.py#L155))
 - `single_cell_anndata_merged_computed_file` in `Project` ([L177](https://github.com/AlexsLemonade/scpca-portal/blob/f6ec0f77e2e020fe4bb5221daf6a6439bfa782a9/api/scpca_portal/models/project.py#L177))
 - `spatial_computed_file` in `Project` ([L188](https://github.com/AlexsLemonade/scpca-portal/blob/f6ec0f77e2e020fe4bb5221daf6a6439bfa782a9/api/scpca_portal/models/project.py#L188)) and `Sample` ([L226](https://github.com/AlexsLemonade/scpca-portal/blob/f6ec0f77e2e020fe4bb5221daf6a6439bfa782a9/api/scpca_portal/models/sample.py#L226))
-  
-<hr />
 
+**A:** 
+
+This is just a helper not specific for testing. We can use it in our application because it is defined on the model.
+
+<hr />
 
 **Q:** Currently, different but similar methods are defined for creating README files in the `Project` model. If this is required, what are the advantages of this pattern over adding a single method (e.g., whitn the model, in `utils`) to handle the generation of all readme files?
 
@@ -307,28 +310,115 @@ def create_single_cell_readme_file(self):
                 ).strip()
             )
 
-
 ```
 
+**A:** 
+
+We are moving from preparing files before compilation of zipped computed files to creating files at time of write.
+
+Before, we were writing files to the output folder that would be used to populate the zip files.
+```
+before:
+data/
+- input
+    - project_metadata.tsv
+    - SCPCP000001/
+    - ... rest of project folders ...
+- output
+    - readme_anndata_scpcp000001.tsv // will go into a zip but renamed
+    - anndata_sample_metadata_scpcp000001.tsv
+    - anndata_scpcp000001.zip (contains anndata_readme, anndata_metadata)
+```
+
+Now we want to only write the files that will be uploaded to the output folder.
+```
+after:
+data/
+- input
+    - project_metadata.tsv
+    - SCPCP000001/
+    - ... rest of project folders ...
+- output
+    - scpcp000001.zip // only the zip files
+```
+
+<hr />
 
 #### Devlopment / Testing:
 During the last meeting, attempting to load the project data locally on my work machine resulted in the `InvalidAccessKeyId` error (also not enough disk space on this machine to load data via the `sportal load-data` command):
 
 e.g. ) Trying to load the project `SCPCP000001`:
 
-![Screenshot 2024-05-22 at 1 47 13 PM](https://github.com/nozomione/ccdl/assets/31800566/54713838-1582-43fc-b077-4bf160a7b14e)
+![Screenshot 2024-05-22 at 1.47.13 PM](https://hackmd.io/_uploads/HkqVnajmR.png)
 
-**Q:** What is the workaround/approach to develop and test my implementation during development if no data can't be loaded locally? (More specifically, when working on this ticket [Add util function for sorting columns of metadata TSVs](https://github.com/AlexsLemonade/scpca-portal/issues/703) 
+
+**Q:** What is the workaround/approach to develop and test my implementation during development if no data can't be loaded locally? (more specifically, when working on the ticket [Add util function for sorting columns of metadata TSVs](https://github.com/AlexsLemonade/scpca-portal/issues/703)) 
+
+
+**A:** 
+
+You can run the tests for this for a couple reasons:
+- You don't want to run against an actual project as that would take a long time.
+- We currently are changing how we provide permissions to access lab resources so there will be tooling for you to run "integration " tests in the future.
+
+You want tests to fail for the changing of metadata keys because we are changing the conditions for the test to pass.
+<hr />
 
 **Q:** The local testing can be easily done on FE development with JavaScript via a browser's console etc. Is there a similar tool that can be incorporated in BE development (e.g., for Python/Django)?
 
+**A:**
 
+You want to write a unit test and call it via:
+- `sportal test-api scpca_portal.test.test_utils.NameofYourTestClass`
+- use `sportal shell` if you need to access a model in the application
+- use `python3` if you want to just validate some python behavior 
 
 #### Nozomi's Note:
 ##### Before the meeting:
-- Based on the feedback left in the issue, updated the Solution or next step section in [Add util function for sorting columns of metadata TSVs](https://github.com/AlexsLemonade/scpca-portal/issues/703) 
+- Based on the feedback left in the issue, updated the Solution or next step section in [Add util function for sorting columns of metadata TSVs](https://github.com/AlexsLemonade/scpca-portal/issues/703).
   
 ##### After the meeting:
+In addition, we covered the following topics:
 
+**1.** ScPCA Commands 
 
+For migrations:
+- [`sportal showmigrations`](https://github.com/AlexsLemonade/scpca-portal/blob/80d21554975db650bf5aca4cd9c6d4691ac84cc9/bin/sportal#L30): lists all the migrations available in the project
+- [`sportal migrate`](https://github.com/AlexsLemonade/scpca-portal/blob/80d21554975db650bf5aca4cd9c6d4691ac84cc9/bin/sportal#L29): syncs the database state with the latest migrations 
 
+e.g.) To use the above commands to selectively apply the named migration to the databse:
+```python
+# Step 1: list the list of migrations and select the migration name
+sportal showmigrations # e.g., 0039_computedfile_includes_celltype_report 
+
+# Step 2: pass the name to migrate command along with the app label
+# migrate [app_label] [migration_name]
+sportal migrate scpca_portal 0039_computedfile_includes_celltype_report
+```
+
+> [!note]
+> - To prevent bugs, make sure to `sportal down` the running server before migration. 
+
+For the test input bucket:
+
+Alternatively, you can load a project from the publicly accessible test input bucket onto the local server by passing the argument [`--input-bucket-name`](https://github.com/AlexsLemonade/scpca-portal/blob/80d21554975db650bf5aca4cd9c6d4691ac84cc9/api/scpca_portal/management/commands/load_data.py#L122):
+
+```
+sportal load-data --input-bucket-name <INPUT_BUCKET_NAME> --scpca-project-id <PROJECT_ID>
+```
+
+> [!note]
+> To prevent an error, make sure to white list `scpca` in [`ALLOWED_SUBMITTERS`](https://github.com/AlexsLemonade/scpca-portal/blob/80d21554975db650bf5aca4cd9c6d4691ac84cc9/api/scpca_portal/management/commands/load_data.py#L18) when loading the test input bucket, but do not commit it.
+
+**2.** Deleting Local API Data
+ To clean up the API data on your machine (if needed):
+ 
+```
+ sudo rm -r api/volumes_postgres/volumes_postgres/
+```
+
+### Homework
+- Continue to work on the unchecked HW items from the previous sessions
+- Work on [Add util function for sorting columns of metadata TSVs](https://github.com/AlexsLemonade/scpca-portal/issues/703)
+
+## 05/29/2024
