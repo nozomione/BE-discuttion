@@ -388,7 +388,7 @@ For migrations:
 
 e.g.) To use the above commands to selectively apply the named migration to the databse:
 ```python
-# Step 1: list the list of migrations and select the migration name
+# Step 1: list available migrations and select a migration name
 sportal showmigrations # e.g., 0039_computedfile_includes_celltype_report 
 
 # Step 2: pass the name to migrate command along with the app label
