@@ -207,7 +207,7 @@ The project is updated at load_data time. And then stored to the database. So it
 - [ ] Look up: ORM/Query API (e.g., for `sportal shell`)
 - [ ] Go over ScPCA test commands/files 
 - [ ] Review the usage of `Sample.modalities` (for Q2)
-- [ ] Based on our chat, outline the steps to simplify the column sorting for the metadata TSVs (related issue [#699](https://github.com/AlexsLemonade/scpca-portal/issues/699)) before drafting an issue for it (see **Nozomi's Note** section below)
+- [x] Based on our chat, outline the steps to simplify the column sorting for the metadata TSVs (related issue [#699](https://github.com/AlexsLemonade/scpca-portal/issues/699)) before drafting an issue for it (see **Nozomi's Note** section below)
 
 #### Nozomi's Note:
 Currently, we sort the columns of metadata TSV files during the write operations using the `get_metadata_field_names` method ([L770](https://github.com/AlexsLemonade/scpca-portal/blob/2d93c9550c4fd442ad85a8568215c1c116d31146/api/scpca_portal/models/project.py#L770)) in the `Project` model:
@@ -236,5 +236,8 @@ These are the steps for simplifying the colum sorting for the metadata TSVs:
 **Step 3:** Replace `Project::get_metadata_field_names` with this newly created utility function
 
 More details: [2024-05-21 - 2024-06-03](https://data-lab-knowledge.slab.com/posts/2024-05-21-2024-06-03-iy7h83m0)
+
+#### Update:
+Filed issue: [Add util function for sorting columns of metadata TSVs](https://github.com/AlexsLemonade/scpca-portal/issues/703) 
 
 ## 05/22/2024
