@@ -258,7 +258,7 @@ More details: [2024-05-21 - 2024-06-03](https://data-lab-knowledge.slab.com/post
 ```
 Is this a common pattern in Django to add properties for testing in the model? If so, should we add comments to describe test properties? 
 
-Or considering the frequent changes in the codebase, will it eventully be refacted?
+Or considering the frequent changes in the codebase, will it eventully be refactored?
 
 **NOTE:** The same question applies to the following properties in the models:
 - `single_cell_computed_file` in `Project` ([L144](https://github.com/AlexsLemonade/scpca-portal/blob/f6ec0f77e2e020fe4bb5221daf6a6439bfa782a9/api/scpca_portal/models/project.py#L144)) and `Sample` ([L204](https://github.com/AlexsLemonade/scpca-portal/blob/f6ec0f77e2e020fe4bb5221daf6a6439bfa782a9/api/scpca_portal/models/sample.py#L204)).
@@ -275,7 +275,7 @@ This is just a helper not specific for testing. We can use it in our application
 
 **Q:** Currently, different but similar methods are defined for creating README files in the `Project` model. If this is required, what are the advantages of this pattern over adding a single method (e.g., whitn the model, in `utils`) to handle the generation of all readme files?
 
-e.g. ) `create_single_cell_readme_file` for Single-cell ([L236](https://github.com/AlexsLemonade/scpca-portal/blob/f6ec0f77e2e020fe4bb5221daf6a6439bfa782a9/api/scpca_portal/models/project.py#L236)), Spatial ([L281](https://github.com/AlexsLemonade/scpca-portal/blob/f6ec0f77e2e020fe4bb5221daf6a6439bfa782a9/api/scpca_portal/models/project.py#L281)):
+e.g. ) Creating the readme file for Single-cell ([L236](https://github.com/AlexsLemonade/scpca-portal/blob/f6ec0f77e2e020fe4bb5221daf6a6439bfa782a9/api/scpca_portal/models/project.py#L236)), Spatial ([L281](https://github.com/AlexsLemonade/scpca-portal/blob/f6ec0f77e2e020fe4bb5221daf6a6439bfa782a9/api/scpca_portal/models/project.py#L281)):
 
 ```py
 # For single-cell
@@ -349,7 +349,7 @@ During the last meeting, attempting to load the project data locally on my work 
 
 e.g. ) Trying to load the project `SCPCP000001`:
 
-![Screenshot 2024-05-22 at 1.47.13 PM](https://hackmd.io/_uploads/HkqVnajmR.png)
+![Screenshot 2024-05-22 at 1 47 13 PM](https://github.com/nozomione/BE-discuttion/assets/31800566/46337ec6-ecb4-4b53-bfdb-e90f4f7903e3)
 
 
 **Q:** What is the workaround/approach to develop and test my implementation during development if no data can't be loaded locally? (more specifically, when working on the ticket [Add util function for sorting columns of metadata TSVs](https://github.com/AlexsLemonade/scpca-portal/issues/703)) 
