@@ -397,7 +397,7 @@ sportal migrate scpca_portal 0039_computedfile_includes_celltype_report
 ```
 
 > [!note]
-> - To prevent bugs, make sure to `sportal down` the running server before migration. 
+> To prevent bugs, make sure to `sportal down` the running server before migration. 
 
 For the test input bucket:
 
