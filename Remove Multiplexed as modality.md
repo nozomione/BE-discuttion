@@ -380,7 +380,7 @@ You want to write a unit test and call it via:
 ##### After the meeting:
 In addition, we covered the following topics:
 
-**1.** ScPCA Commands 
+**Topic 1.** ScPCA Commands 
 
 For migrations:
 - [`sportal showmigrations`](https://github.com/AlexsLemonade/scpca-portal/blob/80d21554975db650bf5aca4cd9c6d4691ac84cc9/bin/sportal#L30): lists all the migrations available in the project
@@ -410,7 +410,7 @@ sportal load-data --input-bucket-name <INPUT_BUCKET_NAME> --scpca-project-id <PR
 > [!note]
 > To prevent an error, make sure to white list `scpca` in [`ALLOWED_SUBMITTERS`](https://github.com/AlexsLemonade/scpca-portal/blob/80d21554975db650bf5aca4cd9c6d4691ac84cc9/api/scpca_portal/management/commands/load_data.py#L18) when loading the test input bucket, but do not commit it.
 
-**2.** Deleting Local API Data
+**Topic 2.** Deleting Local API Data
  To clean up the API data on your machine (if needed):
  
 ```
