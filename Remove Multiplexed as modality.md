@@ -422,3 +422,6 @@ sportal load-data --input-bucket-name <INPUT_BUCKET_NAME> --scpca-project-id <PR
 - Work on [Add util function for sorting columns of metadata TSVs](https://github.com/AlexsLemonade/scpca-portal/issues/703)
 
 ## 05/29/2024
+Go over the opened PR [703 - Add util function for sorting columns of metadata TSVs](https://github.com/AlexsLemonade/scpca-portal/pull/727)
+
+
