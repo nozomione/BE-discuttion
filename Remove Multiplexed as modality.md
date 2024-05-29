@@ -422,6 +422,84 @@ sportal load-data --input-bucket-name <INPUT_BUCKET_NAME> --scpca-project-id <PR
 - Work on [Add util function for sorting columns of metadata TSVs](https://github.com/AlexsLemonade/scpca-portal/issues/703)
 
 ## 05/29/2024
-Go over the opened PR [703 - Add util function for sorting columns of metadata TSVs](https://github.com/AlexsLemonade/scpca-portal/pull/727)
+We went over the opened PR [703 - Add util function for sorting columns of metadata TSVs](https://github.com/AlexsLemonade/scpca-portal/pull/727) for reviews and also covered the following items: 
 
+#### Check the content of output files:
+
+1. Comment out the following line in `test_load_data`:
+
+```py
+class TestLoadData(TransactionTestCase):
+    ...
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+        # shutil.rmtree(common.OUTPUT_DATA_PATH, ignore_errors=True) <- this line
+```
+
+2.  Go to the folder `api/test_data/output` in your finder or `cd` into it via terminal and open a target:
+
+```py
+$ cd api/test_data/output && ll
+```
+
+e.g.) select the zip and open it
+```py
+-rw-r--r--  1 nozomi  staff   9.4K May 29 17:52 SCPCP999991_multiplexed.zip
+-rw-r--r--  1 nozomi  staff   2.4K May 29 17:52 SCPCP999991_multiplexed_metadata.tsv
+-rw-r--r--  1 nozomi  staff   7.9K May 29 17:52 SCPCS999992_SCPCS999993_multiplexed.zip # Open this file 
+-rw-r--r--  1 nozomi  staff   1.9K May 29 17:52 SCPCS999992_multiplexed_metadata.tsv
+-rw-r--r--  1 nozomi  staff   1.9K May 29 17:52 SCPCS999993_multiplexed_metadata.ts
+```
+
+```py
+$ open SCPCS999992_SCPCS999993_multiplexed.zip
+```
+
+#### Use the `pprint` module for readability:
+
+```py
+chars = ['a', 'b', 'c']
+print(letters)
+
+# Output:
+['a', 'b', 'c']
+
+from pprintimport pprint
+pprint(chars)
+
+# Output:
+['a',
+ 'b',
+ 'c']
+
+```
+
+#### Use the `maxDiff` attribute for differences
+We can highlight a difference by setting the `maxDiff` attribute value to `None` when the expected and generated values differ.
+
+e.g.) 
+```py
+class Test(TestCase):
+   self.maxDiff = None # Here
+   # e.g.) print the file path
+   print(f"sample_zip_path ========= {sample_zip_path}")
+```
+
+**Output:**
+
+```py
+[  'scpca_project_id',
+   'scpca_sample_id',
+   'submitter',
++  'sample_cell_count_estimate',
+   'sample_cell_estimates',
+   ...
++  'filtered_cell_count',
+   ...
+]
+```
+
+### Homework
+- Continue to work on the unchecked HW items from the previous sessions
 
