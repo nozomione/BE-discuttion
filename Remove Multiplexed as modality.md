@@ -482,7 +482,7 @@ e.g.)
 ```py
 class Test(TestCase):
    self.maxDiff = None # Here
-   # e.g.) print the file path
+   # e.g.) for better readability, we may also print the file path
    print(f"sample_zip_path ========= {sample_zip_path}")
 ```
 
