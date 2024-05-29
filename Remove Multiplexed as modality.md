@@ -456,7 +456,7 @@ e.g.) select the zip and open it
 $ open SCPCS999992_SCPCS999993_multiplexed.zip
 ```
 
-#### Use the `pprint` module for readability:
+#### Use the [`pprint`](https://docs.python.org/3/library/pprint.html) module for readability:
 
 ```py
 chars = ['a', 'b', 'c']
@@ -475,7 +475,7 @@ pprint(chars)
 
 ```
 
-#### Use the `maxDiff` attribute for differences
+#### Use the [`maxDiff`](https://docs.python.org/3/library/unittest.html#unittest.TestCase.maxDiff) attribute for differences
 We can highlight a difference by setting the `maxDiff` attribute value to `None` when the expected and generated values differ.
 
 e.g.) 
