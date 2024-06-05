@@ -504,16 +504,45 @@ class Test(TestCase):
 - Continue to work on the unchecked HW items from the previous sessions
 
 ## 06/05/2024
+Issue: [Mangement command to generate portal wide metadata only download](https://github.com/AlexsLemonade/scpca-portal/issues/708)
+
 **Q:** Would it be beneficial to give the [`load-data`](https://github.com/AlexsLemonade/scpca-portal/blob/825a4490383fc6c5ebe6a7a2de154cb4294d90be/api/scpca_portal/management/commands/load_data.py#L120) management command for users additional [`help`](https://docs.python.org/3/library/argparse.html#help) arguments? (This is more like a suggestion)?
 
 e.g.)
-```py
+```python=
 parser.add_argument("--reload-all", action="store_true", default=False)
 ```
 
-We'll cover the management commands during the meeting. 
+**A:** Not required at this time since it's only being used internally. For the command reference, we utilize README.
 
-Q: action=argparse.BooleanOptionalAction
+**Q:** `action=argparse.BooleanOptionalAction`
 
-https://docs.python.org/3/library/argparse.html
+> The BooleanOptionalAction is available in argparse and adds support for boolean actions such as ``--foo` and ``--no-foo` 
+> 
+> via [Python Doc: argparse](https://docs.python.org/3/library/argparse.html) (supprted in v3.9+)
+
+e.g.)
+```python
+# First argument
+parser.add_argument("--reload-all", action="store_true", default=False)
+
+# Second argument
+parser.add_argument(
+  "--update-s3", action=BooleanOptionalAction, default=settings.UPDATE_S3_DATA
+)
+```
+
+**A:** We take advantage of this built-in action to support boolean actions out of the box for the second argument. 
+
+
+### Homework
+We went over the high-level overview of the linked issue. 
+
+Based on the `Library` model (upcoming changes), we'll implement a management command to handle the creation of a portal wide metadata file and its README.
+
+By the next meeting:
+- Create a sample management command to run in terminal for practice:
+  - Step 1: Create a `x` management command
+  - Step 2: Create a test and validate the output
+- Outline individual steps for the linked issue based on our meeting conversation
 
