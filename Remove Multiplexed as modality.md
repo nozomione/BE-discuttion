@@ -504,8 +504,6 @@ class Test(TestCase):
 - Continue to work on the unchecked HW items from the previous sessions
 
 ## 06/05/2024
-Issue: [Mangement command to generate portal wide metadata only download](https://github.com/AlexsLemonade/scpca-portal/issues/708)
-
 **Q:** Would it be beneficial to give the [`load-data`](https://github.com/AlexsLemonade/scpca-portal/blob/825a4490383fc6c5ebe6a7a2de154cb4294d90be/api/scpca_portal/management/commands/load_data.py#L120) management command for users additional [`help`](https://docs.python.org/3/library/argparse.html#help) arguments? (This is more like a suggestion)?
 
 e.g.)
@@ -513,7 +511,7 @@ e.g.)
 parser.add_argument("--reload-all", action="store_true", default=False)
 ```
 
-**A:** Not required at this time since it's only being used internally. For the command reference, we utilize README.
+**A:** Not required at this time, since it's only being used internally for development. For the command reference, README is available.
 
 **Q:** `action=argparse.BooleanOptionalAction`
 
@@ -534,15 +532,16 @@ parser.add_argument(
 
 **A:** We take advantage of this built-in action to support boolean actions out of the box for the second argument. 
 
-
 ### Homework
-We went over the high-level overview of the linked issue. 
+**Issue:** [Mangement command to generate portal wide metadata only download](https://github.com/AlexsLemonade/scpca-portal/issues/708)
+
+We went over the high-level overview of the linked issue above. 
 
 Based on the `Library` model (upcoming changes), we'll implement a management command to handle the creation of a portal wide metadata file and its README.
+
 
 By the next meeting:
 - Create a sample management command to run in terminal for practice:
   - Step 1: Create a `x` management command
   - Step 2: Create a test and validate the output
 - Outline individual steps for the linked issue based on our meeting conversation
-
