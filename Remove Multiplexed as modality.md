@@ -503,3 +503,17 @@ class Test(TestCase):
 ### Homework
 - Continue to work on the unchecked HW items from the previous sessions
 
+## 06/05/2024
+**Q:** Would it be beneficial to give the [`load-data`](https://github.com/AlexsLemonade/scpca-portal/blob/825a4490383fc6c5ebe6a7a2de154cb4294d90be/api/scpca_portal/management/commands/load_data.py#L120) management command for users additional [`help`](https://docs.python.org/3/library/argparse.html#help) arguments? (This is more like a suggestion)?
+
+e.g.)
+```py
+parser.add_argument("--reload-all", action="store_true", default=False)
+```
+
+We'll cover the management commands during the meeting. 
+
+Q: action=argparse.BooleanOptionalAction
+
+https://docs.python.org/3/library/argparse.html
+
