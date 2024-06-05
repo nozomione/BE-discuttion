@@ -533,7 +533,7 @@ parser.add_argument(
 **A:** We take advantage of this built-in action to support boolean actions out of the box for the second argument. 
 
 ### Homework
-**Issue:** [Mangement command to generate portal wide metadata only download](https://github.com/AlexsLemonade/scpca-portal/issues/708)
+**Issue:** [Management command to generate portal wide metadata only download](https://github.com/AlexsLemonade/scpca-portal/issues/708)
 
 We went over the high-level overview of the linked issue above. 
 
