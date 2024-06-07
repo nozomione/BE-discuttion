@@ -545,3 +545,4 @@ By the next meeting:
   - Step 1: Create a `x` management command
   - Step 2: Create a test and validate the output
 - Outline individual steps for the linked issue based on our meeting conversation
+- Go over the management commands in the repo and learn how they work
