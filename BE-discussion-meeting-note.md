@@ -546,3 +546,64 @@ By the next meeting:
   - Step 2: Create a test and validate the output
 - Outline individual steps for the linked issue based on our meeting conversation
 - Go over the management commands in the repo and learn how they work
+
+
+## 06/12/2024
+**Issue:** [Management command to generate portal wide metadata only download](https://github.com/AlexsLemonade/scpca-portal/issues/708)
+
+#### Nozomi's Note:
+##### Before the meeting:
+**Homework 1:** Created a command which logs 'Hello World' to the terminal and its test. 
+
+Please see the repo: https://github.com/nozomione/test_management_command
+
+**Homework 2:**
+
+The outline of indivisual steps is as follows:
+
+**Step 1:** Create the `get_portal_metadata_file` method in the `ComputedFile` model that does the following:
+- Query all the metadata for available libraries from the `Library` model using QuerySets API
+- Using the utility sort common const,  remove unneeded additional metadata (via `utils.filter_dict_list_by_keys`)
+- Using `metadata_file` module to write the portal wide metadata TSV, `portal_metadata.tsv`
+- Create README.md
+- create computed file
+- write files to zip archive
+- call upload on computed file
+
+**Step 2:** Create a file `portal_wide_metadata.py` script in `management/commands/`
+
+**Step 3:** Import `BaseCommand` and `ComputedFile` models into the script and create arguments using the `argparse` parser
+
+**Step 4:** Register the `portal_wide_metadata` arguments to `bin/sportal`
+
+##### After the meeting:
+While discussing BE endpoints, we also took a quick look at the following resources/topic:
+
+- [Setting filter backends](https://www.django-rest-framework.org/api-guide/filtering/#setting-filter-backends)
+- [ViewSet: GenericViewSet / ModelViewSet](https://www.django-rest-framework.org/api-guide/viewsets/#viewset)
+- [django-filter](https://django-filter.readthedocs.io/en/main/) which is used in `scpca-portal`
+
+The `filterset_fields` ([L57-L64](https://github.com/AlexsLemonade/scpca-portal/blob/2a69c8c184e5449961c6f7d258e4ce73ac9eb432/api/scpca_portal/views/computed_file.py#L57-L64)) attribute in `ComputedFileViewSet`:
+```python=
+filterset_fields = (
+        "project__id",
+        "sample__id",
+        "id",
+        "format",
+        "modality",
+        "includes_celltype_report",
+)
+```
+
+--- 
+
+Re: discussing endpoints:
+
+- It is way easier to add to an API than it is to take away. So you have to be careful when you add functionality to your API. This is the public interface, you can't lean over in your office chair to tell some consumer that there is going to be a breaking change. If you do this you break trust and no one wants to use your API.
+- You can't "over fit" your API for your internal client. This is particularly true for public APIs, less true for closed / private APIs that change in unison with their implemented clients.
+- You want to broadly support your internal client in a way that doesn't restrict usage or violate established conventions.
+
+
+### Homework
+From the existing planned steps (last homework), find examples of implementation (not calling a function, copy the code blocks) that is an example for that line item in the step.
+
