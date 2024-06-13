@@ -605,5 +605,5 @@ Re: discussing endpoints:
 
 
 ### Homework
-From the existing planned steps (last homework), find examples of implementation (not calling a function, copy the code blocks) that is an example for that line item in the step.
+From the existing planned steps (last homework), find examples of implementation from the `scpca-portal` repo (if not calling a function, copy the code blocks), that is an example for that line item in the step.
 
