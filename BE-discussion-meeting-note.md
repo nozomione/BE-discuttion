@@ -760,8 +760,8 @@ README_TEMPLATE_METADATA_PATH 	= 	README_TEMPLATE_PATH / "metadata_only.md" 	"ho
  README_TEMPLATE_METADATA_PATH = README_TEMPLATE_PATH / "metadata_only.md"
  ```   
    
-4. Using the `with` statement and the built-on `open` function, create a zip file:
- ```python=
+4. Using the `with` statement and the built-in `open` function, create a zip file:
+ ```py
  # In Project
 def create_metadata_readme_file(self):
   ...
