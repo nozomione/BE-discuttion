@@ -607,5 +607,296 @@ Re: discussing endpoints:
 ### Homework
 From the existing planned steps (last homework), find examples of implementation in the `scpca-portal` repo (if not calling a function, copy the code blocks), that is an example for that line item in the step.
 
+## 06/19/2024
+**Issue:** [Management command to generate portal wide metadata only download](https://github.com/AlexsLemonade/scpca-portal/issues/708)
+
+#### Nozomi's Note:
+##### Before the meeting:
+At our last meeting, we reviewed and updated [`Homework 2`](https://hackmd.io/uiQn3Dl9S7WkUrQZV8A52g?both#06122024) (an outline of indivisual steps for the linked issue) together. 
+
+The following section (for **homework** from the last meeting) lists the examples of implementation  per step found in `scpca-portal` (for [Project level metadata only download](https://github.com/AlexsLemonade/scpca-portal/issues/738)).
+
+
+#### Example snippets per step:
+**Step 1:** Create the `get_portal_metadata_file` method in the `ComputedFile` model that does the following:
+> - Query all the metadata for available libraries from the `Library` model using QuerySets API
+
+1. Use these methods to load and parse the metadata from the input bucket, and transform keys as required using `meadata_file.transform_keys` ([L79-L87](https://github.com/AlexsLemonade/scpca-portal/blob/82d77063288fc6198402a8b46409b0eaf88c1f3f/api/scpca_portal/metadata_file.py#L79-L87)
+  -  `metadata_file.load_projects_metadata`([L42-L53](https://github.com/AlexsLemonade/scpca-portal/blob/82d77063288fc6198402a8b46409b0eaf88c1f3f/api/scpca_portal/metadata_file.py#L42-L53))
+  - `metadata_file.load_samples_metadata`([L56-L67](https://github.com/AlexsLemonade/scpca-portal/blob/82d77063288fc6198402a8b46409b0eaf88c1f3f/api/scpca_portal/metadata_file.py#L56-L67))
+  - `metadata_file.load_library_metadata`([L70-L76](https://github.com/AlexsLemonade/scpca-portal/blob/82d77063288fc6198402a8b46409b0eaf88c1f3f/api/scpca_portal/metadata_file.py#L70-L76))
+
+2. Use the above method in the `load_data` management command ([L178](https://github.com/AlexsLemonade/scpca-portal/blob/9df72a63f57149bdf41c90af147ccca592da854f/api/scpca_portal/management/commands/load_data.py#L178)):
+
+```py
+def load_data(...):
+    ...
+    # Here
+    project_list = metadata_file.load_projects_metadata(
+      Project.get_input_project_metadata_file_path()
+    )
+    
+def load_samples_metadata(...):
+    # Here
+        samples_metadata = metadata_file.load_samples_metadata(
+            self.input_samples_metadata_file_path
+        )    
+        
+def get_multiplexed_libraries_metadata(self):
+   ...
+   # Here
+   metadata_file.load_library_metadata(filename_path)
+            multiplexed_libraries_metadata.append(multiplexed_json)
+```
+
+### Feedback:
+
+This isn't merged into dev yet, but in ordert to get the library metadata that we want to write to the file we actually want to query the `Library` model.
+
+ex:
+```py
+
+libraries = Library.objects.all()
+
+libraries_metadata = [library.get_metadata() for library in libraries]
+
+```
+
+
+`load_projects_metadata` etc are just for "loading" metadata, meaning we do this when we want to populate the database, but for you, you should assume the database is already populated when we run this command. essentially we are taking a snapshot of the libraries table (joined with sample and project metadata).
+
+The function on library `get_metadata` is currently filed in this PR: https://github.com/AlexsLemonade/scpca-portal/pull/765
+
+> [!note]
+> With the introduction of the `Library` model, there will be no data loading of portal metadata, but only portal metadata writing needs to be considered. 
+> 
+> Keep in mind that we'll be refactoring the `load-data` management command to leverage the `Library` model in the future.
+
+
+> - Using the utility sort common const,  remove unneeded additional metadata (via `utils.filter_dict_list_by_keys`)
+
+Use `metadata_file.write_metadata_dicts` ([L90-L107](https://github.com/AlexsLemonade/scpca-portal/blob/82d77063288fc6198402a8b46409b0eaf88c1f3f/api/scpca_portal/metadata_file.py#L90-L107)) to sort and filter out the metadata keys:
+
+```python=
+def write_combined_metadata_libraries (...): 
+     ...   
+    kwargs["fieldnames"] = kwargs.get(
+            "fieldnames", utils.get_sorted_field_names(utils.get_keys_from_dicts(list_of_dicts))
+        )
+        kwargs["delimiter"] = kwargs.get("delimiter", common.TAB)
+
+        sorted_list_of_dicts = sorted(
+            list_of_dicts,
+            key=lambda k: (
+                k[common.PROJECT_ID_KEY],
+                k[common.SAMPLE_ID_KEY],
+                k[common.LIBRARY_ID_KEY],
+            ),
+        )
+```
+
+### Feedback:
+```py
+# continuing from above feedback snippet
+
+# libraries_metadata = ...
+
+portal_metadata = utils.filter_dict_list_by_keys(libraries_metadata, common.METADATA_COLUMN_SORT_ORDER)
+```
+
+> [!note]
+> We query all the library metadata from the `Library` model and use the common's metadata column sort order to exlude keys when writing portal metadata. 
+
+
+> - Using `metadata_file` module to write the portal wide metadata TSV, `portal_metadata.tsv`
+
+### Feedback:
+```py
+# continues from above feedback
+
+# portal_metadata = ...
+
+metadata_file.write_metadata_dicts(portal_metadata, FILE_PATH)
+```
+
+ex:
+```py
+PORTAL_METADATA_PATH = ~/dev/portal_metadata.tsv
+PORTAL_METADATA_NAME = computed_file.metadata_file_name
+
+# write output tsv to LOCAL_PATH
+metadata_file.write_metadata_dicts(metadata_dicts, LOCAL_PATH)
+
+# when we go to archive, you copy from LOCAL_PATH to FILENAME
+
+with ZipFile() as zipfile:
+    zipfile.write(LOCAL_PATH, FILENAME)
+```
+
+> [!note]
+> Keep in mind that rather than using a locally stored data, we'll be handling the writing of zip files with a buffer ([io.StringIO](https://docs.python.org/3/library/io.html#io.StringIO)) in the future and the local path will no longer be required.
+
+> - Create README.md
+
+1. Add the readme filename to the `ComputedFile.MetadataFilenames` class  ([L26-L29](https://github.com/AlexsLemonade/scpca-portal/blob/82d77063288fc6198402a8b46409b0eaf88c1f3f/api/scpca_portal/models/computed_file.py#L26-L29)):
+```py
+    class MetadataFilenames:
+        ...
+        METADATA_ONLY_FILE_NAME = "metadata.tsv"
+```
+
+2. Add constants for a README's filename and path ([L65-L66](https://github.com/AlexsLemonade/scpca-portal/blob/82d77063288fc6198402a8b46409b0eaf88c1f3f/api/scpca_portal/models/computed_file.py#L65-L66))
+
+```py
+README_METADATA_NAME = "readme_metadata_only.md"
+README_METADATA_PATH = common.OUTPUT_DATA_PATH / README_METADATA_NAME
+```
+3. Add a constants for the README's template path ([L79](https://github.com/AlexsLemonade/scpca-portal/blob/9df72a63f57149bdf41c90af147ccca592da854f/api/scpca_portal/models/computed_file.py#L79)) and use it in `Project::reate_metadata_readme_file` ([L287-L301](https://github.com/AlexsLemonade/scpca-portal/blob/9df72a63f57149bdf41c90af147ccca592da854f/api/scpca_portal/models/project.py#L287-L301)):
+4. 
+```py
+# In ComputedFile
+# e.g.) "home/user/data/scpca_portal/templates/readme/metadata_only.md"
+README_TEMPLATE_METADATA_PATH 	= 	README_TEMPLATE_PATH / "metadata_only.md" 	"home/user/data/scpca_portal/templates/readme/metadata_only.md"
+ README_TEMPLATE_METADATA_PATH = README_TEMPLATE_PATH / "metadata_only.md"
+ ```   
+   
+4. Using the `with` statement and the built-on `open` function, create a zip file:
+ ```python=
+ # In Project
+def create_metadata_readme_file(self):
+  ...
+  with open(ComputedFile.README_METADATA_PATH, "w") as readme_file:
+            readme_file.write(
+                render_to_string(
+                    ComputedFile.README_TEMPLATE_METADATA_PATH,
+```
+
+ (**Thoughts:** For the portal metadata, we may add a new `@property` for the project-level metadata zip (e.g., is_metadata_only_zip). And if none of these checks are met in `ComputedFile.metadata_file_name`, returns the portal metadata filename (e.g., `ComputedFile.MetadataFilenames.PORTAL_METADATA_ONLY_FILE_NAME`)?)
+
+**A:** No, this will use the same readme template. We just need to pass all of the projects to this template in the same format of tuples that we have for the single metadata only readme.
+
+> [!note]
+> And to maintain consistency, we will use the same filename `metadata.tsv` for both the portal-wide and project-level metadata TSV files. We'll make the distinction later, only if it's necessary.
+
+
+> - create computed file
+
+This method is used to create project-level computed files:
+```py
+  def create_project_computed_files(...):
+```       
+> [!note]
+> For the portal metadata, we'll create a new method to populate and generate the portal metadata computed file using the `Library`  model.
+
+> - write files to zip archive
+
+1. Return the medatadata filename, `ComputedFile.metadata_file_name` at [L542-L548](https://github.com/AlexsLemonade/scpca-portal/blob/82d77063288fc6198402a8b46409b0eaf88c1f3f/api/scpca_portal/models/computed_file.py#L542-L548)):
+```py
+@property
+def metadata_file_name(self):
+  if self.is_project_multiplexed_zip or self.is_project_single_cell_zip:
+    return ComputedFile.MetadataFilenames.SINGLE_CELL_METADATA_FILE_NAME
+  if self.is_project_spatial_zip:
+    return ComputedFile.MetadataFilenames.SPATIAL_METADATA_FILE_NAME
+  return ComputedFile.MetadataFilenames.METADATA_ONLY_FILE_NAME # Here
+```    
+- This is already fine - DM
+
+2. `ComputedFile::get_project_metadata_file` ([L185-L206](https://github.com/AlexsLemonade/scpca-portal/blob/82d77063288fc6198402a8b46409b0eaf88c1f3f/api/scpca_portal/models/computed_file.py#L185-L206)) uses `ZipFile` class from the `zipfile` module to write and create a zip archive for the metadata TSV and README files. Instantiate itself (`computed_file`) and pass `computed_filemetadata_file_name` as the final metadata TSV filename included in the archive file:
+
+```py
+with ZipFile(computed_file.zip_file_path, "w") as zip_file:
+   # e.g.) "home/user/data/output/readme_metadata_only.md", "README.md" 
+   zip_file.write(ComputedFile.README_METADATA_PATH, ComputedFile.OUTPUT_README_FILE_NAME)
+   # e.g.) "/home/user/data/SCPCP000001_all_metadata.tvs", "metadata.tsv"  
+   zip_file.write(project.output_all_metadata_file_path, computed_file.metadata_file_name)
+```
+
+3. In `Project` model, the above method is passed `ComputedFile.get_project_metadata_file` as a callback to `ThreadPoolExecutor`'s' `tasks.submit()` ([L398-L406](https://github.com/AlexsLemonade/scpca-portal/blob/82d77063288fc6198402a8b46409b0eaf88c1f3f/api/scpca_portal/models/project.py#L398-L406)):
+```py
+ tasks.submit(
+    ComputedFile.get_project_metadata_file,
+    self,
+    (
+     workflow_versions_by_modality[Sample.Modalities.SINGLE_CELL]
+    | workflow_versions_by_modality[Sample.Modalities.SPATIAL]
+    | workflow_versions_by_modality[Sample.Modalities.MULTIPLEXED]
+    ),
+).add_done_callback(create_project_computed_file)
+    
+```
+### Feedback:
+- You will be in the context of the management command when you call this function. Also you don't need to worry about multithreading, since there will only be one computed file generated (nothing to do async).
+- You will just call `ComputedFile.get_portal_metadata_file` directly.
+
+> call upload on computed file
+
+1. Use AWS CLI tool to upload a computed file in `ComputedFile::upload_s3_file` ([L537](https://github.com/AlexsLemonade/scpca-portal/blob/82d77063288fc6198402a8b46409b0eaf88c1f3f/api/scpca_portal/models/computed_file.py#L573)) :
+```py
+ def upload_s3_file(self):
+     ...
+```
+ 2. Call the method above from `ComputedFile::process_computed_file` ([L605-L618](https://github.com/AlexsLemonade/scpca-portal/blob/82d77063288fc6198402a8b46409b0eaf88c1f3f/api/scpca_portal/models/computed_file.py#L605-L618)) when `update_s3` is true:
+```py
+ def upload_s3_file(self):
+     ...
+```
+
+3. Use `ComputedFile::process_computed_file` in the `Project` and `Sample` models.
+
+In `Project::create_project_computed_files > create_project_computed_file` ([L346](https://github.com/AlexsLemonade/scpca-portal/blob/9df72a63f57149bdf41c90af147ccca592da854f/api/scpca_portal/models/project.py#L346)), if there is a computed file and `update_s3` is true:
+
+```py
+def create_project_computed_files(
+   ...
+
+   def create_project_computed_file(future):
+   ... 
+        if computed_file:
+            computed_file.process_computed_file(clean_up_output_data, update_s3)
+```
+
+In `Sample::create_sample_computed_files > create_sample_computed_file`  ([L278](https://github.com/AlexsLemonade/scpca-portal/blob/9df72a63f57149bdf41c90af147ccca592da854f/api/scpca_portal/models/sample.py#L278)), if there is a computed file and `update_s3` is true:
+
+```py
+def create_sample_computed_files(
+   ...
+
+   def create_sample_computed_file(future):
+   ... 
+        if computed_file:
+            computed_file.process_computed_file(clean_up_output_data, update_s3)
+```
+
+(**Question:** Why `Sample::create_sample_computed_files` is a static method but `Project::create_project_computed_files` is not?)
+
+**A:** This is an inconsistency with how we determine if a computed file can be created. This inconsistency will be removed as we transition to the Library model.
+
+<hr />
+
+### Feedback:
+- You won't need to worry about the threadpool stuff, we will be handling everything sequentially because there are no variations of portal wide metadata.
+
+Thank you 👍 - NI
+
+#### Nozomi's Note:
+##### After the meeting:
+We've also quickly covered the following topics:
+
+- [Django template](https://docs.djangoproject.com/en/5.0/topics/templates/) used in the README templates.
+- Naming pattern of constants for README's filenames and paths used in our codebase.
+
+### Homework
+- Create a draft issue for [Project level metadata only download](https://github.com/AlexsLemonade/scpca-portal/issues/738) in HackMD and outline the steps based on David's feedback for further review
+- Continue learning and understanding the codebase, including upcoming updates:
+  -  [739 - Combine Library Metadata](https://github.com/AlexsLemonade/scpca-portal/pull/765)
+  -  [Update computed file creation logic in Project and Sample models](https://github.com/AlexsLemonade/scpca-portal/issues/740)
+ 
+ 
+## 06/26/2024
+**Issue:** [Management command to generate portal wide metadata only download](https://github.com/AlexsLemonade/scpca-portal/issues/708)
+
+- Add Link to the draft here
+- List questions if any
 
 
