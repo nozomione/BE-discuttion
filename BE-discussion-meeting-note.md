@@ -752,7 +752,7 @@ README_METADATA_NAME = "readme_metadata_only.md"
 README_METADATA_PATH = common.OUTPUT_DATA_PATH / README_METADATA_NAME
 ```
 3. Add a constants for the README's template path ([L79](https://github.com/AlexsLemonade/scpca-portal/blob/9df72a63f57149bdf41c90af147ccca592da854f/api/scpca_portal/models/computed_file.py#L79)) and use it in `Project::reate_metadata_readme_file` ([L287-L301](https://github.com/AlexsLemonade/scpca-portal/blob/9df72a63f57149bdf41c90af147ccca592da854f/api/scpca_portal/models/project.py#L287-L301)):
-4. 
+
 ```py
 # In ComputedFile
 # e.g.) "home/user/data/scpca_portal/templates/readme/metadata_only.md"
