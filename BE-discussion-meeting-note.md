@@ -896,7 +896,7 @@ We've also quickly covered the following topics:
 ## 06/26/2024
 **Issue:** [Management command to generate portal wide metadata only download](https://github.com/AlexsLemonade/scpca-portal/issues/708)
 
-- Add a link to the draft issue here
-- List questions if any
+- Add a link to the draft issue
+- Add questions if any
 
 
