@@ -890,7 +890,7 @@ We've also quickly covered the following topics:
 - Create a draft issue for [Project level metadata only download](https://github.com/AlexsLemonade/scpca-portal/issues/738) in HackMD and outline the steps based on David's feedback for further review
 
  > [!note]
-> Due to on going updates, the steps might adjusted later.
+> Due to on going updates, the steps might be adjusted later.
 
 
 - Continue learning and understanding the codebase, including upcoming updates:
