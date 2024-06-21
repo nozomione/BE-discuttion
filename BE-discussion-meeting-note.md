@@ -891,7 +891,10 @@ We've also quickly covered the following topics:
 - Continue learning and understanding the codebase, including upcoming updates:
   -  [739 - Combine Library Metadata](https://github.com/AlexsLemonade/scpca-portal/pull/765)
   -  [Update computed file creation logic in Project and Sample models](https://github.com/AlexsLemonade/scpca-portal/issues/740)
- 
+
+
+ > [!note]
+> Due to on going updates, the steps might change.
  
 ## 06/26/2024
 **Issue:** [Management command to generate portal wide metadata only download](https://github.com/AlexsLemonade/scpca-portal/issues/708)
