@@ -507,7 +507,7 @@ class Test(TestCase):
 **Q:** Would it be beneficial to give the [`load-data`](https://github.com/AlexsLemonade/scpca-portal/blob/825a4490383fc6c5ebe6a7a2de154cb4294d90be/api/scpca_portal/management/commands/load_data.py#L120) management command for users additional [`help`](https://docs.python.org/3/library/argparse.html#help) arguments? (This is more like a suggestion)?
 
 e.g.)
-```python=
+```py
 parser.add_argument("--reload-all", action="store_true", default=False)
 ```
 
@@ -584,7 +584,7 @@ While discussing BE endpoints, we also took a quick look at the following resour
 - [django-filter](https://django-filter.readthedocs.io/en/main/) which is used in `scpca-portal`
 
 The `filterset_fields` ([L57-L64](https://github.com/AlexsLemonade/scpca-portal/blob/2a69c8c184e5449961c6f7d258e4ce73ac9eb432/api/scpca_portal/views/computed_file.py#L57-L64)) attribute in `ComputedFileViewSet`:
-```python=
+```py
 filterset_fields = (
         "project__id",
         "sample__id",
@@ -677,7 +677,7 @@ The function on library `get_metadata` is currently filed in this PR: https://gi
 
 Use `metadata_file.write_metadata_dicts` ([L90-L107](https://github.com/AlexsLemonade/scpca-portal/blob/82d77063288fc6198402a8b46409b0eaf88c1f3f/api/scpca_portal/metadata_file.py#L90-L107)) to sort and filter out the metadata keys:
 
-```python=
+```py
 def write_combined_metadata_libraries (...): 
      ...   
     kwargs["fieldnames"] = kwargs.get(
@@ -899,10 +899,204 @@ We've also quickly covered the following topics:
 
 
 
-## 06/26/2024
-**Issue:** [Management command to generate portal wide metadata only download](https://github.com/AlexsLemonade/scpca-portal/issues/708)
+## 07/03/2024
+**Parent Issue:** [Management command to generate portal wide metadata only download](https://github.com/AlexsLemonade/scpca-portal/issues/708)
 
-- Add a link to the draft issue
-- Add questions if any
+- Draft Issue: [Management command for portal wide metadata download](https://hackmd.io/tjbcY8wzQlOPFyw71ecKIQ?view)
+
+### Homework
+- Revise the above draft issue based on the feedback
+- Include a list of questions in this doc 
+
+## 07/10/2024
+
+Updated draft: [Management command for portal wide metadata download](https://hackmd.io/tjbcY8wzQlOPFyw71ecKIQ?view)
 
 
+#### Business logic:
+
+**Q:** The rationale for including/excluding metadata attributes defined below:
+
+
+```py
+# Libary 
+def get_metadata(self) -> Dict:
+    library_metadata = {
+        "scpca_library_id": self.scpca_id,
+    }
+
+    excluded_metadata_attributes = [ # Why?
+        "scpca_sample_id",
+        "has_citeseq",
+    ]
+    library_metadata.update(
+        {
+            key: self.metadata[key]
+            for key in self.metadata
+            if key not in excluded_metadata_attributes
+        }
+    )
+
+
+# Sample
+def get_metadata(self) -> Dict:
+    sample_metadata = {
+        "scpca_sample_id": self.scpca_id,
+    }
+
+    included_sample_attributes = [
+        "age_at_diagnosis",
+        "diagnosis",
+        "disease_timing",
+        "sex",
+        "subdiagnosis",
+        "tissue_location",
+        "includes_anndata",
+        "is_cell_line",
+        "is_xenograft",
+        "sample_cell_count_estimate",
+    ]
+    sample_metadata.update(
+        {key: getattr(self, key) for key in dict(self) if key in included_sample_attributes}
+    )
+
+    sample_metadata.update(
+        {key: self.additional_metadata[key] for key in self.additional_metadata}
+    )
+
+    return sample_metadata
+
+# Project
+def get_metadata(self) -> Dict:
+        return {
+            "scpca_project_id": self.scpca_id,
+            "pi_name": self.pi_name,
+            "project_title": self.title,
+        }
+
+
+```
+
+**Answer:** We only store metadata that isnt stored in a property on the model on "additional_metadata". Everything is stored (duplicated as model attributes) in "metadata". That is the difference. We will move away from "additional_metadata" and move towards just keeping "metadata" and deriving "additional_metadata"
+
+
+
+**Q:** What is a `workflow_version` and how often does it change and how many `workflow_versions` can be assiciated to each `computed_file`?
+
+```py
+def join_workflow_versions(workflow_versions: Set) -> str:
+    """Returns list of sorted unique workflow versions."""
+
+    return ", ".join(sorted(set(workflow_versions)))
+
+
+```
+**Answer:** There is a workflow version per library, computed files have a plural workflow version because we want to be able to support showing the user if different libraries were procesed under different versions.
+
+
+#### Testing:
+**Q:** What is the best way to test the whole porta-wide metadata download flows (creation to upload)? 
+**Answer:** Short answer as we will cover this in more detail int he future, Populate the test db with mock data, call your command in a test, make assertions that the outputted file contains the correct mocked data.
+#### General:
+##### File Creation
+**Q:** Why the order of a zip creation and a class instantiation is differed in the following methods?
+**Answer:** The best order which we are switching to is create the zip, then create computed file, then upload, then save the computed file (making it publicly available)
+
+e.g.) First zip and then instantiation [L130](https://github.com/AlexsLemonade/scpca-portal/blob/9542045d1df8dc86cc9b23053898ce9b47bb3fbb/api/scpca_portal/models/computed_file.py#L130)
+```py
+@classmethod
+    def get_project_file(cls, project, download_config: Dict, computed_file_name: str) -> Self:
+        ...
+       
+        with ZipFile(zip_file_path, "w") as zip_file:
+            # Readme file
+            zip_file.write(
+                ComputedFile.get_readme_from_download_config(download_config),
+                cls.OUTPUT_README_FILE_NAME,
+            )
+           ...
+
+        computed_file = cls(...)
+
+```
+
+e.g.) First instantiation and then zip [L339](https://github.com/AlexsLemonade/scpca-portal/blob/9542045d1df8dc86cc9b23053898ce9b47bb3fbb/api/scpca_portal/models/computed_file.py#L339)
+```py
+@classmethod
+def get_project_single_cell_file(
+cls, project, sample_to_file_mapping, workflow_versions, file_format
+):
+
+    computed_file = cls(...)
+    
+    with ZipFile(computed_file.zip_file_path, "w") as zip_file:
+        zip_file.write(readme_file_path, ComputedFile.OUTPUT_README_FILE_NAME)
+        zip_file.write(
+            project.output_single_cell_metadata_file_path, computed_file.metadata_file_name
+        )
+
+    ...
+```
+
+**Q:** What is the reason for some files being saved to the databse at the time of creation while others are not? 
+e.g. ) Saving `computed_file` [L193](https://github.com/AlexsLemonade/scpca-portal/blob/9542045d1df8dc86cc9b23053898ce9b47bb3fbb/api/scpca_portal/models/computed_file.py#L193)
+**Answer:** Lack of consistency that will be resolved by having a unified function that handles the flow.
+```py
+def get_project_file(cls, project, download_config: Dict, computed_file_name: str) -> Self:
+    """
+    Queries for a project's libraries according to the given download options configuration,
+    writes the queried libraries to a libraries metadata file,
+    computes a zip archive with library data, metadata and readme files, and
+    creates a ComputedFile object which it then saves to the db.
+    """
+ ...
+ computed_file.save() # Saved
+```
+e.g.) Not saving `computed_file` [L298](https://github.com/AlexsLemonade/scpca-portal/blob/9542045d1df8dc86cc9b23053898ce9b47bb3fbb/api/scpca_portal/models/computed_file.py#L298)
+```py
+ def get_project_multiplexed_file(cls, project, sample_to_file_mapping, workflow_versions, file_format):
+   """Prepares a ready for saving single data file of project's combined multiplexed data."""
+   # Not saved
+```
+
+**Q:** Why we use both `ClassName` and `cls` to access the class attributes/methods?
+
+e.g.) Accessing class attributes:
+Using `cls` [L158](https://github.com/AlexsLemonade/scpca-portal/blob/9542045d1df8dc86cc9b23053898ce9b47bb3fbb/api/scpca_portal/models/computed_file.py#L158):
+```py
+ zip_file_path = common.OUTPUT_DATA_PATH / computed_file_name
+    with ZipFile(zip_file_path, "w") as zip_file:
+        # Readme file
+        zip_file.write(
+            ComputedFile.get_readme_from_download_config(download_config), # Using 'ComputedFile' to access the class method
+            cls.OUTPUT_README_FILE_NAME, # here we use 'cls' to access class attribute
+        )
+        # Metadata file
+        zip_file.write(getattr(cls.MetadataFilenames, metadata_path_var))
+```
+
+Using `ClassName` [L288](https://github.com/AlexsLemonade/scpca-portal/blob/9542045d1df8dc86cc9b23053898ce9b47bb3fbb/api/scpca_portal/models/computed_file.py#L288):
+```py
+ with ZipFile(computed_file.zip_file_path, "w") as zip_file:
+    # Here, we use 'ComputedFile' to access class attribute
+    zip_file.write(ComputedFile.README_METADATA_PATH, ComputedFile.OUTPUT_README_FILE_NAME)  # Why not 'cls.' ?
+    zip_file.write(project.output_all_metadata_file_path, computed_file.metadata_file_name)
+```
+
+e.g.) Accessing inner class:
+Using `cls` [L150](https://github.com/AlexsLemonade/scpca-portal/blob/9542045d1df8dc86cc9b23053898ce9b47bb3fbb/api/scpca_portal/models/computed_file.py#L150):
+```py
+ zip_file.write(getattr(cls.MetadataFilenames, metadata_path_var))
+```
+Using `ClassName` [L542](https://github.com/AlexsLemonade/scpca-portal/blob/9542045d1df8dc86cc9b23053898ce9b47bb3fbb/api/scpca_portal/models/computed_file.py#L542):
+```py
+ zip_file.write(
+     sample.output_multiplexed_metadata_file_path,
+     ComputedFile.MetadataFilenames.SINGLE_CELL_METADATA_FILE_NAME,
+ )
+```
+
+  
+### Homework
+- Going over the management commands `load_data` test
+- Include a list of questions in this doc 
