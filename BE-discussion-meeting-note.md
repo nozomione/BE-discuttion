@@ -1131,7 +1131,7 @@ Others:
 
 
 ### Homework
--[x] 1. Update the draft issue [[WIP] Management command for portal wide metadata download](https://github.com/AlexsLemonade/scpca-portal/issues/797) as follows:
+- [x] 1. Update the draft issue [[WIP] Management command for portal wide metadata download](https://github.com/AlexsLemonade/scpca-portal/issues/797) as follows:
    - Move the temp note to the bottom of the issue as a comment
    - Move the entire content of "Solution or next step" to "Problem or idea"
    - Add the details below to "Solution or next step":
