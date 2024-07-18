@@ -1096,7 +1096,77 @@ Using `ClassName` [L542](https://github.com/AlexsLemonade/scpca-portal/blob/9542
  )
 ```
 
-  
 ### Homework
+- Add the management command in the draft issue to purge data from the database and s3 bucket
+  - Further readings on the `pathlib` module
 - Going over the management commands `load_data` test
-- Include a list of questions in this doc 
+- Include a list of questions in this doc
+
+
+## 07/17/2024
+#### Nozomi's Note:
+##### Before the meeting:
+After reading `api/scpca_portal/test/management/commands/test_load_data.py`, I've outlined a potential shortlist of the portal-wide metadata management command test. Please let me know your thought on this.
+
+**1. General preparation:** 
+- Specify `ALLOWED_SUBMITTERS` to `scpca`
+- Deifne the `TestGeneratePortalMetadata` class that inherits Django's test case class `TransactionTestCase` to isolate tests by rolling back any changes made to the database during each test 
+- Define the `setUp` method to store the portal-wide metadata management command's `Command` instance to `self.[propertyName]` in order to run `generate_portal_metadata` in tests 
+- Define `tearDownClass` for cleanup after all tests have been excecuted
+- Load the testing data from `INPUT_BUCKET_NAME` (which is interpreted as `scpca-portal-public-test-inputs/YYYY-MM-DD` for testing)
+
+**2. Test items**
+- Contents of the generated zip file using the context manager and `zipfile` module:
+  - File names
+  - File counts
+  - File sizes
+  - File contents (e.g., validating field values):
+    - `matadata.tsv`
+    - `README.md`
+
+Others:
+- Filed draft issue in `scpca_portal` [[WIP] Management command for portal wide metadata download](https://github.com/AlexsLemonade/scpca-portal/issues/797)
+- Draft issue in HackMD [Draft: Management command for portal wide metadata download](https://hackmd.io/tjbcY8wzQlOPFyw71ecKIQ?view) 
+- Upcoming changes in PR [Break up Computed::process_computed_file](https://github.com/AlexsLemonade/scpca-portal/pull/798)
+
+
+### Homework
+1. Update the draft issue [[WIP] Management command for portal wide metadata download](https://github.com/AlexsLemonade/scpca-portal/issues/797) as follows:
+   - Move the temp note to the bottom of the issue as a comment
+   - Move the entire content of "Solution or next step" to "Problem or idea"
+   - Add the details below to "Solution or next step":
+
+    ```
+    - Scaffolding the management command
+        1. Add the base command for the `create-portal-metadata.py` file
+        2. Add a test file that populates the database by calling the `load_data` command
+        3. Add the `create-portal-metadata` command to `sportal`
+
+    - Generate and add `README.md`to a zip file
+       1. Generate README file in in the management command
+       2. Add a test to verify the content of the generated zip file
+
+    - Generate and add `metadata.tsv` to a zip file
+        1. Generate metadata TSV file in the management command
+        2. Add a test to verify the content of the generated zip file
+    ```
+
+2. Update the issue [Consolidate multitudes of readmes into a single template readme.md](https://github.com/AlexsLemonade/scpca-portal/issues/794) as follows: 
+   - Edit the proposed file structure and only include `index.md` in the `usage` folder (In future updates, we'll be providing `download_config` as the template context to the `readme.md` template to conditionally render the `usage` content based on `format`)
+   - Remove the loop from the `readme.md` template, and explicitly include the subfolder with a `index.md` file, otherwise use `contents_template` to include the readme file path(i.e., `contents`)
+
+3. Update the issue [Replace create_readme_file template with new generic readme.md](https://github.com/AlexsLemonade/scpca-portal/issues/795) as follows:
+   - Based on the updates above (2), adjust this issue (e.g., remove the readme sort, change the `content_templates` value) 
+   
+     (**NOTE:** Dependencies [Consolidate multitudes of readmes into a single template readme.md](https://github.com/AlexsLemonade/scpca-portal/issues/794), [Just in Time Readme Creation](https://github.com/AlexsLemonade/scpca-portal/issues/766))
+ 
+4. Update the issue [Change REAME.md template context included_projects to projects](https://github.com/AlexsLemonade/scpca-portal/issues/781) and adjust its PR [781 - Change REAME.md template context included_projects to projects ](https://github.com/AlexsLemonade/scpca-portal/pull/790):
+   - Change the template context for all create-readme methods (not just metadata-only) and adjust the context variable names in their corresponding readme templates
+
+5. Update the PR [782 - Update Citation and Terms of Use - Additional Terms to table](https://github.com/AlexsLemonade/scpca-portal/pull/792) as follows:
+   - Optimize the `if` statement
+   - Invoke `Project::project.get_additional_terms` directoly in the `additional_terms` readme template
+
+
+
+
