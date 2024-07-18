@@ -1153,10 +1153,10 @@ Others:
 
 2. Update the issue [Consolidate multitudes of readmes into a single template readme.md](https://github.com/AlexsLemonade/scpca-portal/issues/794) as follows: 
    - Edit the proposed file structure and only include `index.md` in the `usage` folder (In future updates, we'll be providing `download_config` as the template context to the `readme.md` template to conditionally render the `usage` content based on `format`)
-   - Remove the loop from the `readme.md` template, and explicitly include the subfolder with a `index.md` file, otherwise use `contents_template` to include the readme file path(i.e., `contents`)
+   - Remove the loop from the `readme.md` template, and explicitly include the subfolder with a `index.md` file, otherwise use `content_template` to include the readme file path, i.e., `contents`
 
 3. Update the issue [Replace create_readme_file template with new generic readme.md](https://github.com/AlexsLemonade/scpca-portal/issues/795) as follows:
-   - Based on the updates above (2), adjust this issue (e.g., remove the readme sort, change the `content_templates` value) 
+   - Based on the updates above (2), adjust this issue (e.g., remove the readme sort, change the `content_template` value) 
    
      (**NOTE:** Dependencies [Consolidate multitudes of readmes into a single template readme.md](https://github.com/AlexsLemonade/scpca-portal/issues/794), [Just in Time Readme Creation](https://github.com/AlexsLemonade/scpca-portal/issues/766))
  
@@ -1165,8 +1165,5 @@ Others:
 
 5. Update the PR [782 - Update Citation and Terms of Use - Additional Terms to table](https://github.com/AlexsLemonade/scpca-portal/pull/792) as follows:
    - Optimize the `if` statement
-   - Invoke `Project::project.get_additional_terms` directoly in the `additional_terms` readme template
-
-
-
+   - Invoke `Project::project.get_additional_terms` directly in the `additional_terms` readme template
 
