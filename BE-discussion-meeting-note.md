@@ -1126,12 +1126,12 @@ After reading `api/scpca_portal/test/management/commands/test_load_data.py`, I'v
 
 Others:
 - Filed draft issue in `scpca_portal` [[WIP] Management command for portal wide metadata download](https://github.com/AlexsLemonade/scpca-portal/issues/797)
-- Draft issue in HackMD [Draft: Management command for portal wide metadata download](https://hackmd.io/tjbcY8wzQlOPFyw71ecKIQ?view) 
+- Draft issue in HackMD [Draft: Management command for portal wide metadata download](https://hackmd.io/tjbcY8wzQlOPFyw71ecKIQ?view)(started adding purge workflow - in progress)
 - Upcoming changes in PR [Break up Computed::process_computed_file](https://github.com/AlexsLemonade/scpca-portal/pull/798)
 
 
 ### Homework
-1. Update the draft issue [[WIP] Management command for portal wide metadata download](https://github.com/AlexsLemonade/scpca-portal/issues/797) as follows:
+-[x] 1. Update the draft issue [[WIP] Management command for portal wide metadata download](https://github.com/AlexsLemonade/scpca-portal/issues/797) as follows:
    - Move the temp note to the bottom of the issue as a comment
    - Move the entire content of "Solution or next step" to "Problem or idea"
    - Add the details below to "Solution or next step":
@@ -1151,19 +1151,19 @@ Others:
         2. Add a test to verify the content of the generated zip file
     ```
 
-2. Update the issue [Consolidate multitudes of readmes into a single template readme.md](https://github.com/AlexsLemonade/scpca-portal/issues/794) as follows: 
+- [x] 2. Update the issue [Consolidate multitudes of readmes into a single template readme.md](https://github.com/AlexsLemonade/scpca-portal/issues/794) as follows: 
    - Edit the proposed file structure and only include `index.md` in the `usage` folder (In future updates, we'll be providing `download_config` as the template context to the `readme.md` template to conditionally render the `usage` content based on `format`)
    - Remove the loop from the `readme.md` template, and explicitly include the subfolder with a `index.md` file, otherwise use `content_template` to include the readme file path, i.e., `contents`
 
-3. Update the issue [Replace create_readme_file template with new generic readme.md](https://github.com/AlexsLemonade/scpca-portal/issues/795) as follows:
+- [x] 3. Update the issue [Replace create_readme_file template with new generic readme.md](https://github.com/AlexsLemonade/scpca-portal/issues/795) as follows:
    - Based on the updates above (2), adjust this issue (e.g., remove the readme sort, change the `content_template` value) 
    
      (**NOTE:** Dependencies [Consolidate multitudes of readmes into a single template readme.md](https://github.com/AlexsLemonade/scpca-portal/issues/794), [Just in Time Readme Creation](https://github.com/AlexsLemonade/scpca-portal/issues/766))
  
-4. Update the issue [Change REAME.md template context included_projects to projects](https://github.com/AlexsLemonade/scpca-portal/issues/781) and adjust its PR [781 - Change REAME.md template context included_projects to projects ](https://github.com/AlexsLemonade/scpca-portal/pull/790):
+- [x] 4. Update the issue [Change REAME.md template context included_projects to projects](https://github.com/AlexsLemonade/scpca-portal/issues/781) and adjust its PR [781 - Change REAME.md template context included_projects to projects ](https://github.com/AlexsLemonade/scpca-portal/pull/790):
    - Change the template context for all create-readme methods (not just metadata-only) and adjust the context variable names in their corresponding readme templates
 
-5. Update the PR [782 - Update Citation and Terms of Use - Additional Terms to table](https://github.com/AlexsLemonade/scpca-portal/pull/792) as follows:
+- [x] 5. Update the PR [782 - Update Citation and Terms of Use - Additional Terms to table](https://github.com/AlexsLemonade/scpca-portal/pull/792) as follows:
    - Optimize the `if` statement
-   - Invoke `Project::project.get_additional_terms` directly in the `additional_terms` readme template
+   - Invoke `Project::project.get_additional_terms` directly in the template
 
