@@ -155,6 +155,7 @@ def output_multiplexed_metadata_file_path(self):
     # ['Bulk RNA-seq', 'Multiplexed' ]
 ```
 
+<p align="right">(<a href="#qa">back to top</a>)</p>
 
 ## 05/15/2024
 **Q:** What is the method for viewing the tables (e.g., [`samples`](https://github.com/AlexsLemonade/scpca-portal/blob/026a204a0aa89e6e2572038a46cbe154af7efbef/api/scpca_portal/models/sample.py#L11)) in the databse? Do we use any GUI tools during development (e.g., [pgAdmin](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ConnectToPostgreSQLInstance.html#USER_ConnectToPostgreSQLInstance.pgAdmin))?
@@ -256,6 +257,8 @@ These are the steps for simplifying the colum sorting for the metadata TSVs:
 **Step 3:** Replace `get_metadata_field_names` with this newly created utility function
 
 More details: [2024-05-21 - 2024-06-03](https://data-lab-knowledge.slab.com/posts/2024-05-21-2024-06-03-iy7h83m0)
+
+<p align="right">(<a href="#qa">back to top</a>)</p>
 
 ## 05/22/2024
 #### General:
@@ -440,6 +443,8 @@ sportal load-data --input-bucket-name <INPUT_BUCKET_NAME> --scpca-project-id <PR
 - Continue to work on the unchecked HW items from the previous sessions
 - Work on [Add util function for sorting columns of metadata TSVs](https://github.com/AlexsLemonade/scpca-portal/issues/703)
 
+<p align="right">(<a href="#qa">back to top</a>)</p>
+
 ## 05/29/2024
 We went over the opened PR [703 - Add util function for sorting columns of metadata TSVs](https://github.com/AlexsLemonade/scpca-portal/pull/727) for reviews and also covered the following items: 
 
@@ -522,6 +527,8 @@ class Test(TestCase):
 ### Homework
 - Continue to work on the unchecked HW items from the previous sessions
 
+<p align="right">(<a href="#qa">back to top</a>)</p>
+
 ## 06/05/2024
 **Q:** Would it be beneficial to give the [`load-data`](https://github.com/AlexsLemonade/scpca-portal/blob/825a4490383fc6c5ebe6a7a2de154cb4294d90be/api/scpca_portal/management/commands/load_data.py#L120) management command for users additional [`help`](https://docs.python.org/3/library/argparse.html#help) arguments? (This is more like a suggestion)?
 
@@ -566,6 +573,7 @@ By the next meeting:
 - Outline individual steps for the linked issue based on our meeting conversation
 - Go over the management commands in the repo and learn how they work
 
+<p align="right">(<a href="#qa">back to top</a>)</p>
 
 ## 06/12/2024
 **Issue:** [Management command to generate portal wide metadata only download](https://github.com/AlexsLemonade/scpca-portal/issues/708)
@@ -625,6 +633,8 @@ Re: discussing endpoints:
 
 ### Homework
 From the existing planned steps (last homework), find examples of implementation in the `scpca-portal` repo (if not calling a function, copy the code blocks), that is an example for that line item in the step.
+
+<p align="right">(<a href="#qa">back to top</a>)</p>
 
 ## 06/19/2024
 **Issue:** [Management command to generate portal wide metadata only download](https://github.com/AlexsLemonade/scpca-portal/issues/708)
@@ -916,7 +926,7 @@ We've also quickly covered the following topics:
   -  [739 - Combine Library Metadata](https://github.com/AlexsLemonade/scpca-portal/pull/765)
   -  [Update computed file creation logic in Project and Sample models](https://github.com/AlexsLemonade/scpca-portal/issues/740)
 
-
+<p align="right">(<a href="#qa">back to top</a>)</p>
 
 ## 07/03/2024
 **Parent Issue:** [Management command to generate portal wide metadata only download](https://github.com/AlexsLemonade/scpca-portal/issues/708)
@@ -925,7 +935,9 @@ We've also quickly covered the following topics:
 
 ### Homework
 - Revise the above draft issue based on the feedback
-- Include a list of questions in this doc 
+- Include a list of questions in this doc
+
+<p align="right">(<a href="#qa">back to top</a>)</p>
 
 ## 07/10/2024
 
