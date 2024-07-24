@@ -1167,3 +1167,27 @@ Others:
    - Optimize the `if` statement
    - Invoke `Project::project.get_additional_terms` directly in the template
 
+## 07/24/2024
+#### Nozomi's Note:
+##### Before the meeting:
+- Completed the previous HW (updated issuees/PRs based on upcoming changes)
+- Created PRs for the issue [Management command for portal wide metadata download](https://github.com/AlexsLemonade/scpca-portal/issues/797):
+  - **1st** [797 - Scaffolding the porta-wide metadata management command and test files
+](https://github.com/AlexsLemonade/scpca-portal/pull/804)
+  - **2nd** [794 - Consolidate multitudes of readmes into a single template readme.md ](https://github.com/AlexsLemonade/scpca-portal/pull/805)
+  - **3rd** [797 - Generate and add metadata.tsv to a zip file](https://github.com/AlexsLemonade/scpca-portal/pull/810)
+
+In order to prepare for the above stacked PRs adjustments, I've started scanning the upcoming changes included in the following PRs:
+- [784 - In memory metadata file generation ](https://github.com/AlexsLemonade/scpca-portal/pull/803)
+- [767 - Just In Time Data File Downloads](https://github.com/AlexsLemonade/scpca-portal/pull/809)
+
+I think that the next step is to add the save workflow(to s3 bucket/database) to the portal metadata management command, and then purge workdlow. Please let me know your input on this, thank you David!
+
+### Homework
+Address PR feedback in the following order:
+
+1. The readme updates PRs
+2. The portal-wide metadata management command stacked PRs
+
+
+
