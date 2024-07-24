@@ -1133,6 +1133,7 @@ Using `ClassName` [L542](https://github.com/AlexsLemonade/scpca-portal/blob/9542
 - Going over the management commands `load_data` test
 - Include a list of questions in this doc
 
+<p align="right">(<a href="#qa">back to top</a>)</p>
 
 ## 07/17/2024
 #### Nozomi's Note:
@@ -1159,7 +1160,6 @@ Others:
 - Filed draft issue in `scpca_portal` [[WIP] Management command for portal wide metadata download](https://github.com/AlexsLemonade/scpca-portal/issues/797)
 - Draft issue in HackMD [Draft: Management command for portal wide metadata download](https://hackmd.io/tjbcY8wzQlOPFyw71ecKIQ?view)(started adding purge workflow - in progress)
 - Upcoming changes in PR [Break up Computed::process_computed_file](https://github.com/AlexsLemonade/scpca-portal/pull/798)
-
 
 ### Homework
 - [x] 1. Update the draft issue [[WIP] Management command for portal wide metadata download](https://github.com/AlexsLemonade/scpca-portal/issues/797) as follows:
@@ -1197,6 +1197,8 @@ Others:
 - [x] 5. Update the PR [782 - Update Citation and Terms of Use - Additional Terms to table](https://github.com/AlexsLemonade/scpca-portal/pull/792) as follows:
    - Optimize the `if` statement
    - Invoke `Project::project.get_additional_terms` directly in the template
+
+<p align="right">(<a href="#qa">back to top</a>)</p>
 
 ## 07/24/2024
 #### Nozomi's Note:
