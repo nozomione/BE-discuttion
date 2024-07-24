@@ -1,8 +1,8 @@
 # Q&A
 
-<details>
-  <summary>Table of Contents</summary><br/>
-
+<details open>
+  <summary><strong>Table of Contents</strong></summary><br/>
+  
   - [05/08/2024](#05082024) 
   - [05/15/2024](#05152024)
   - [05/22/2024](#05222024)
@@ -14,7 +14,10 @@
   - [07/10/2024](#07102024)
   - [07/17/2024](#07172024)
   - [07/24/2024](#07242024)
+    
 </details>
+
+<br/>
 
 **Epic:** [Remove Sample.Modalities.MULTIPLEXED](https://github.com/AlexsLemonade/scpca-portal/issues/695) 
 
@@ -1206,4 +1209,4 @@ Address PR feedback in the following order:
 2. The portal-wide metadata management command stacked PRs
 
 
-
+<a href="#qa" />
