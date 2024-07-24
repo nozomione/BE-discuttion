@@ -1208,5 +1208,4 @@ Address PR feedback in the following order:
 1. The readme updates PRs
 2. The portal-wide metadata management command stacked PRs
 
-
-<a href="#qa" />
+<p align="right">(<a href="#qa">back to top</a>)</p>
