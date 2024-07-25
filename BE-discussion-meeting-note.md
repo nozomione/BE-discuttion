@@ -1221,7 +1221,7 @@ Address PR feedback in the following order:
 
 1. The readme updates PRs
 2. The portal-wide metadata management command stacked PRs
-3. 3. Add save workdlow (will create a new stacked PR)
+3. Add save workdlow (will create a new stacked PR)
 4. Add purge workflow (in a new issue)
 
 
