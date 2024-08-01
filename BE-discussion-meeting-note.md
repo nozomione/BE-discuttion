@@ -14,6 +14,7 @@
   - [07/10/2024](#07102024)
   - [07/17/2024](#07172024)
   - [07/24/2024](#07242024)
+  - [07/31/2024](#07312024)
     
 </details>
 
@@ -1220,9 +1221,38 @@ I think that the next step is to add the save workflow(to s3 bucket/database) to
 Address PR feedback in the following order:
 
 1. The readme updates PRs
-2. The portal-wide metadata management command stacked PRs
-3. Add save workdlow (will create a new stacked PR)
-4. Add purge workflow (in a new issue)
+2. The portal metadata management command stacked PRs
+3. Issue [Persist portal metadata computed file and upload after creation](https://github.com/AlexsLemonade/scpca-portal/issues/813)
+4. Issue [Ensure only one portal metadata computed file exists at a time](https://github.com/AlexsLemonade/scpca-portal/issues/815)
 
 
 <p align="right">(<a href="#qa">back to top</a>)</p>
+
+## 07/31/2024
+#### Nozomi's Note:
+##### Before the meeting:
+Issue [Persist portal metadata computed file and upload after creation](https://github.com/AlexsLemonade/scpca-portal/issues/813):
+- Created PR [813 - Persist portal metadata computed file and upload after creation](https://github.com/AlexsLemonade/scpca-portal/pull/825)
+
+### Homework
+Address the following items in order:
+- [x] Adjust the readme updates PRs based on the feedback
+- [x] Merge the latest `dev` changes into the portal metadata management command stacked PRs 
+- [ ] Merge the new readme structure update PR into `feature/portal-metadata-command`
+- [ ] Adjust codebase and tests based on the input from this meeting:
+    - Remove the `TODO` comments and adjust the codebase
+    - Revise `readme_file.get_file_contents` (no longer need `is_portal_metadata` flag)
+    - Revise `create_portal_metadata` as needed 
+    - Revise `test_create_portal_metadata` 
+      - Remove the individual test methods and assert directly in `test_create_portal_metadata`
+      - Use the `cvs` module to obtain expected count value etc
+      - Use `common.METADATA_COLUMN_SORT_ORDER` for `expected_keys`
+- [ ] Create a PR for the issue [Ensure only one portal metadata computed file exists at a time](https://github.com/AlexsLemonade/scpca-portal/issues/815)
+
+
+<p align="right">(<a href="#qa">back to top</a>)</p>
+
+## 08/07/2024
+
+
+
