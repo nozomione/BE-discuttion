@@ -1239,7 +1239,7 @@ Address the following items in order:
 - [x] Adjust the readme updates PRs based on the feedback
 - [x] Merge the latest `dev` changes into the portal metadata management command stacked PRs 
 - [x] Merge the new readme structure update PR into `feature/portal-metadata-command`
-- [ ] Adjust codebase and tests based on the input from this meeting:
+- [x] Adjust codebase and tests based on the input from this meeting:
     - Remove the `TODO` comments and adjust the codebase
     - Revise `readme_file.get_file_contents` (no longer need `is_portal_metadata` flag)
     - Revise `create_portal_metadata` as needed 
